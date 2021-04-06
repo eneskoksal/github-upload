@@ -9,8 +9,7 @@ public class Card {
 	 * @param number
 	 */
 	public Card(int number) {
-		// TODO - implement Card.Card
-		throw new UnsupportedOperationException();
+		this.number = number;
 	}
 
 	public int getNumber() {

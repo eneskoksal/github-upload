@@ -4,19 +4,24 @@ public class CardReader {
 
 	private ATM atm;
 
-	/**
-	 * 
-	 * @param atm
-	 */
 	public CardReader(ATM atm) {
-		// TODO - implement CardReader.CardReader
-		throw new UnsupportedOperationException();
+		this.atm = atm;
 	}
-
-	public Card readCard() {
-		// TODO - implement CardReader.readCard
-		throw new UnsupportedOperationException();
+	//This func shall be called by user
+	public void insertCard(Card MyCard) {
+		Card insertedCard = this.readCard(MyCard);
+		if (insertedCard != null) {
+			this.atm.getCardInfo(MyCard);
+			this.retainCard();
+		}
+		else {
+			this.ejectCard();
+		}
 	}
+	
+	public Card readCard(Card MyCard) {		
+		return MyCard;
+	}	
 
 	public void ejectCard() {
 		// TODO - implement CardReader.ejectCard

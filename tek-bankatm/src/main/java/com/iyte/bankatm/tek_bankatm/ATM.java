@@ -9,24 +9,33 @@ public class ATM {
 	private int minWithdrawPerTransaction;
 	private int maxWithdrawPerTransaction;
 	private int maxWithdrawPerDayAccount;
-	private int limitTimeForOperation;
-	private MonetaryAmount initAmount;
-	CashDispenser MyCashDispenser = new CashDispenser(new Log());
+	private int limitTimeForOperation;	
+	private Card anyCard;
+	private ATMstate state;
 	
-	//ATM Functional requirement 1
-	public ATM(MonetaryAmount initAmount, int minWithdrawPerTransaction, 
-			int maxWithdrawPerTransaction, int maxWithdrawPerDayAccount) {		
-		this.initAmount = initAmount;
+	CashDispenser MyCashDispenser = new CashDispenser(new Log());
+	CardReader MyCardReader = new CardReader(this);
+	
+	//After ATM is created set state to IDLE
+	public ATM() {
+		this.state = ATMstate.IDLE;
+	}
+	//ATM Func. REQ 1
+	public void setInitialParameters(MonetaryAmount initAmount, int minWithdrawPerTransaction, 
+			int maxWithdrawPerTransaction, int maxWithdrawPerDayAccount) {
+		this.MyCashDispenser.setInitialCash(initAmount);
 		this.minWithdrawPerTransaction = minWithdrawPerTransaction;
 		this.maxWithdrawPerTransaction = maxWithdrawPerTransaction;
 		this.maxWithdrawPerDayAccount = maxWithdrawPerDayAccount;
 	}
-	
-	public void setInitialCash(MonetaryAmount amount) {
-		this.MyCashDispenser.setInitialCash(initAmount);
+	//This shall be called by card reader
+	public void getCardInfo(Card MyCard) {
+		this.anyCard = MyCard;
 	}
-		
-	
+	//Set current state of ATM
+	public void setState(ATMstate state) {
+		this.state = state;
+	}
 	/**
 	 * 
 	 * @param password
