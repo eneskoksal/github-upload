@@ -14,8 +14,7 @@ public class Display {
 	 * @param message
 	 */
 	public void display(String message) {
-		// TODO - implement Display.display
-		throw new UnsupportedOperationException();
+		System.out.println(message);
 	}
 
 	/**
