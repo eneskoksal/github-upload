@@ -1,36 +1,36 @@
 package com.iyte.bankatm.tek_bankatm;
 
 public class CardReader {
-
+	
 	private ATM atm;
-
+	private Card anyCard;
+	
 	public CardReader(ATM atm) {
 		this.atm = atm;
 	}
+
 	//This func shall be called by user
 	public void insertCard(Card MyCard) {
-		Card insertedCard = this.readCard(MyCard);
-		if (insertedCard != null) {
-			this.atm.getCardInfo(MyCard);
-			this.retainCard();
+		this.atm.setNextState(FSM.READING_CARD);		
+		if (MyCard != null) {
+			this.anyCard = MyCard;
+			this.atm.setNextState(FSM.CARD_READ_SUCCESS);
 		}
 		else {
 			this.ejectCard();
 		}
 	}
 	
-	public Card readCard(Card MyCard) {		
-		return MyCard;
+	public Card readCard() {		
+		return this.anyCard;
 	}	
 
 	public void ejectCard() {
-		// TODO - implement CardReader.ejectCard
-		throw new UnsupportedOperationException();
+		this.atm.setNextState(FSM.EJECTING_CARD);
 	}
-
+	//Card read successfully
 	public void retainCard() {
-		// TODO - implement CardReader.retainCard
-		throw new UnsupportedOperationException();
+		this.atm.setNextState(FSM.WAITING_PASSWORD);
 	}
 
 }
