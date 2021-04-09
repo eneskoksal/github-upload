@@ -1,6 +1,7 @@
 package com.iyte.bankatm.tek_bankatm;
 
 import java.time.LocalDateTime;
+import java.util.Scanner;
 import java.time.LocalDate;
 import javax.money.MonetaryAmount;
 import org.javamoney.moneta.Money;
@@ -12,18 +13,16 @@ public class ATM {
 	private int maxWithdrawPerDayAccount;
 	private int limitTimeForOperation;	
 	private Card anyCard;
-	private FSM currState;
-	private FSM nextState;
 	private CashDispenser MyCashDispenser;
 	private CardReader MyCardReader;
+	private Scanner MyKeyboard;	
 	
 	//After ATM is created set state to IDLE
 	public ATM() {
 		this.MyCashDispenser = new CashDispenser(new Log());
 		this.MyCardReader = new CardReader(this);
-		this.setState(FSM.OFF);
-		this.currState = FSM.OFF;
-		this.nextState = FSM.OFF;
+		this.MyKeyboard = new Scanner(System.in);
+		this.callStateOFF();
 	}
 	//ATM Func. REQ 1
 	public void setInitialParameters(MonetaryAmount initAmount, int minWithdrawPerTransaction, 
@@ -33,58 +32,56 @@ public class ATM {
 		this.maxWithdrawPerTransaction = maxWithdrawPerTransaction;
 		this.maxWithdrawPerDayAccount = maxWithdrawPerDayAccount;
 	}	
-	//Set current state of ATM
-	private void setState(FSM state) {
-		switch(state) {
-			case OFF:
-				System.out.println("Turned off");
-				break;
-			case IDLE:
-				System.out.println("ATM is initialized, waiting for a card to be inserted");
-				break;
-			case READING_CARD:
-				System.out.println("Reading a card");
-				break;
-			case CARD_READ_SUCCESS:
-				System.out.println("Card is read successfully");
-				anyCard = MyCardReader.readCard();
-				LocalDate today = LocalDate.now();
-				if(anyCard.getExpireDate().compareTo(today) < 0) {
-					System.out.println("Card date is expired");
-					this.nextState = FSM.EJECTING_CARD;
-				}
-				break;
-			case WAITING_PASSWORD:
+
+	//State functions
+	public void callStateOFF() {
+		System.out.println("Turned off");
+	}
+	public void callStateIDLE() {
+		System.out.println("ATM is initialized, waiting for a card to be inserted");
+	}
+	public void callStateREADING_CARD() {
+		System.out.println("Reading a card");
+	}
+	public void callStateWAITING_PASSWORD() {
+		System.out.println("Card is read successfully");
+		anyCard = MyCardReader.readCard();
+		LocalDate today = LocalDate.now();
+		if(anyCard.getExpireDate().compareTo(today) < 0) {
+			System.out.println("Card date is expired");
+			this.callStateEJECTING_CARD();
+		}
+		else {
+			System.out.println("Please type your password");
+			String password = MyKeyboard.nextLine();
+			String response = this.verify(password);
+			if(response == "OK") {
 				
-				break;
-			case CHOOSE_TRANSACTION:
+			} else if(response == "bad password") {
 				
-				break;
-			case PERFORMING_TRANSACTION:
+			} else if(response == "bad bank code") {
 				
-				break;
-			case PRINTING_RECEIPT:
+			} else if(response == "bad account") {
 				
-				break;
-			case EJECTING_CARD:
-				System.out.println("Ejecting the card");
-				this.nextState = FSM.IDLE;				
-				break;
-			
+			}
 		}
 	}
-	public void setNextState(FSM nextState) {
-		this.nextState = nextState;
+	public void callStateCHOOSE_TRANSACTION() {
+		System.out.println("Reading a card");
 	}
-	//Finite state machine to be called in main
-	public void FSM() {
-		if(this.currState != this.nextState)
-			this.setState(this.nextState);
+	public void callStatePERFORMING_TRANSACTION() {
+		System.out.println("Reading a card");
+	}
+	public void callStatePRINTING_RECEIPT() {
+		System.out.println("Reading a card");
+	}
+	public void callStateEJECTING_CARD() {
+		System.out.println("Ejecting the card");		
 	}
 	
 	public String verify(String password) {
-		// TODO - implement ATM.verify
-		throw new UnsupportedOperationException();
+		//Implement verify function
+		return "OK";
 	}
 
 	/**
@@ -96,9 +93,14 @@ public class ATM {
 		throw new UnsupportedOperationException();
 	}
 
-	public Message checkAvailabilityOfCashInATM() {
-		// TODO - implement ATM.checkAvailabilityOfCashInATM
-		throw new UnsupportedOperationException();
+	public Message checkAvailabilityOfCashInATM(MonetaryAmount xmoney) {		
+		if(MyCashDispenser.checkCashOnHand(xmoney)) {
+			//?
+		}			
+		return new Message();
+	}
+	public MonetaryAmount getCashOnHand() {
+		return this.MyCashDispenser.getCashOnHand();
 	}
 
 	public Message verifyInputAmount() {

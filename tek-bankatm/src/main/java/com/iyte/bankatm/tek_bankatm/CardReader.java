@@ -11,10 +11,10 @@ public class CardReader {
 
 	//This func shall be called by user
 	public void insertCard(Card MyCard) {
-		this.atm.setNextState(FSM.READING_CARD);		
+		this.atm.callStateREADING_CARD();		
 		if (MyCard != null) {
 			this.anyCard = MyCard;
-			this.atm.setNextState(FSM.CARD_READ_SUCCESS);
+			this.atm.callStateWAITING_PASSWORD();
 		}
 		else {
 			this.ejectCard();
@@ -26,11 +26,11 @@ public class CardReader {
 	}	
 
 	public void ejectCard() {
-		this.atm.setNextState(FSM.EJECTING_CARD);
+		this.atm.callStateEJECTING_CARD();
 	}
 	//Card read successfully
 	public void retainCard() {
-		this.atm.setNextState(FSM.WAITING_PASSWORD);
+		System.out.println("Card is retained, call the bank");
 	}
 
 }
