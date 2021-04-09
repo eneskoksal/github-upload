@@ -1,5 +1,7 @@
 package com.iyte.bankatm.tek_bankatm;
 
+import java.net.InetAddress;
+
 public class NetworkToBank {
 
 	private Log log;
