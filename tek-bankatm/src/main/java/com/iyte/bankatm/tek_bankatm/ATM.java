@@ -1,6 +1,8 @@
 package com.iyte.bankatm.tek_bankatm;
 
 import java.time.LocalDateTime;
+import java.util.Scanner;
+import java.time.LocalDate;
 import javax.money.MonetaryAmount;
 import org.javamoney.moneta.Money;
 
@@ -11,14 +13,16 @@ public class ATM {
 	private int maxWithdrawPerDayAccount;
 	private int limitTimeForOperation;	
 	private Card anyCard;
-	private ATMstate state;
-	
-	CashDispenser MyCashDispenser = new CashDispenser(new Log());
-	CardReader MyCardReader = new CardReader(this);
+	private CashDispenser MyCashDispenser;
+	private CardReader MyCardReader;
+	private Scanner MyKeyboard;	
 	
 	//After ATM is created set state to IDLE
 	public ATM() {
-		this.state = ATMstate.IDLE;
+		this.MyCashDispenser = new CashDispenser(new Log());
+		this.MyCardReader = new CardReader(this);
+		this.MyKeyboard = new Scanner(System.in);
+		this.callStateOFF();
 	}
 	//ATM Func. REQ 1
 	public void setInitialParameters(MonetaryAmount initAmount, int minWithdrawPerTransaction, 
@@ -27,22 +31,57 @@ public class ATM {
 		this.minWithdrawPerTransaction = minWithdrawPerTransaction;
 		this.maxWithdrawPerTransaction = maxWithdrawPerTransaction;
 		this.maxWithdrawPerDayAccount = maxWithdrawPerDayAccount;
+	}	
+
+	//State functions
+	public void callStateOFF() {
+		System.out.println("Turned off");
 	}
-	//This shall be called by card reader
-	public void getCardInfo(Card MyCard) {
-		this.anyCard = MyCard;
+	public void callStateIDLE() {
+		System.out.println("ATM is initialized, waiting for a card to be inserted");
 	}
-	//Set current state of ATM
-	public void setState(ATMstate state) {
-		this.state = state;
+	public void callStateREADING_CARD() {
+		System.out.println("Reading a card");
 	}
-	/**
-	 * 
-	 * @param password
-	 */
+	public void callStateWAITING_PASSWORD() {
+		System.out.println("Card is read successfully");
+		anyCard = MyCardReader.readCard();
+		LocalDate today = LocalDate.now();
+		if(anyCard.getExpireDate().compareTo(today) < 0) {
+			System.out.println("Card date is expired");
+			this.callStateEJECTING_CARD();
+		}
+		else {
+			System.out.println("Please type your password");
+			String password = MyKeyboard.nextLine();
+			String response = this.verify(password);
+			if(response == "OK") {
+				
+			} else if(response == "bad password") {
+				
+			} else if(response == "bad bank code") {
+				
+			} else if(response == "bad account") {
+				
+			}
+		}
+	}
+	public void callStateCHOOSE_TRANSACTION() {
+		System.out.println("Reading a card");
+	}
+	public void callStatePERFORMING_TRANSACTION() {
+		System.out.println("Reading a card");
+	}
+	public void callStatePRINTING_RECEIPT() {
+		System.out.println("Reading a card");
+	}
+	public void callStateEJECTING_CARD() {
+		System.out.println("Ejecting the card");		
+	}
+	
 	public String verify(String password) {
-		// TODO - implement ATM.verify
-		throw new UnsupportedOperationException();
+		//Implement verify function
+		return "OK";
 	}
 
 	/**
@@ -54,9 +93,14 @@ public class ATM {
 		throw new UnsupportedOperationException();
 	}
 
-	public Message checkAvailabilityOfCashInATM() {
-		// TODO - implement ATM.checkAvailabilityOfCashInATM
-		throw new UnsupportedOperationException();
+	public Message checkAvailabilityOfCashInATM(MonetaryAmount xmoney) {		
+		if(MyCashDispenser.checkCashOnHand(xmoney)) {
+			//?
+		}			
+		return new Message();
+	}
+	public MonetaryAmount getCashOnHand() {
+		return this.MyCashDispenser.getCashOnHand();
 	}
 
 	public Message verifyInputAmount() {

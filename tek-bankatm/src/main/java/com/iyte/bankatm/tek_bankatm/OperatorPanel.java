@@ -14,14 +14,14 @@ public class OperatorPanel {
 	}
 
 	public MonetaryAmount getInitialCash() {
-		return this.atm.MyCashDispenser.getCashOnHand();
+		return this.atm.getCashOnHand();		
 	}
 	//ATM Func. REQ 1
 	public void initializeATM(MonetaryAmount initAmount, int minWithdrawPerTransaction, 
-			int maxWithdrawPerTransaction, int maxWithdrawPerDayAccount) {
-		
+			int maxWithdrawPerTransaction, int maxWithdrawPerDayAccount) {		
 		this.atm.setInitialParameters(initAmount, minWithdrawPerTransaction, 
 				maxWithdrawPerTransaction, maxWithdrawPerDayAccount);
+		this.atm.callStateIDLE();		
 	}
 
 }
