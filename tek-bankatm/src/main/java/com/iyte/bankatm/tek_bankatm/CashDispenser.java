@@ -14,8 +14,7 @@ public class CashDispenser {
 	 * @param log
 	 */
 	public CashDispenser(Log log) {
-		// TODO - implement CashDispenser.CashDispenser
-		throw new UnsupportedOperationException();
+		
 	}
 	
 	public MonetaryAmount getCashOnHand() {

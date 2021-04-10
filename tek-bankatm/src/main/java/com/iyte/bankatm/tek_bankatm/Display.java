@@ -1,12 +1,15 @@
 package com.iyte.bankatm.tek_bankatm;
 
+import java.util.Scanner;
+
 import javax.money.MonetaryAmount;
 
 public class Display {
+	
+	private Scanner MyKeyboard;
 
 	public Display() {
-		// TODO - implement Display.Display
-		throw new UnsupportedOperationException();
+		this.MyKeyboard = new Scanner(System.in);
 	}
 
 	/**
@@ -14,16 +17,17 @@ public class Display {
 	 * @param message
 	 */
 	public void display(String message) {
-		System.out.println(message);
+		System.out.println("Display: " + message);
 	}
 
 	/**
 	 * 
 	 * @param prompt
 	 */
-	public int readPIN(String prompt) {
-		// TODO - implement Display.readPIN
-		throw new UnsupportedOperationException();
+	public String readPIN(String prompt) {
+		this.display(prompt);
+		String password = MyKeyboard.nextLine();
+		return password;
 	}
 
 	/**

@@ -4,20 +4,20 @@ import java.time.LocalDate;
 
 public class Card {
 
-	private int number;
+	private int serialNumber;
+	private int bankCode;
 	private LocalDate expireDate;
-
-	/**
-	 * 
-	 * @param number
-	 */
-	public Card(int number, LocalDate expireDate) {
-		this.number = number;
+	
+	public Card(int serialNumber, LocalDate expireDate) {
+		this.serialNumber = serialNumber;
 		this.expireDate = expireDate;				
 	}
 
-	public int getNumber() {
-		return this.number;
+	public int getSerialNumber() {
+		return this.serialNumber;
+	}
+	public int getBankCode() {
+		return this.bankCode;
 	}
 	
 	public LocalDate getExpireDate() {
