@@ -7,22 +7,25 @@ import javax.money.MonetaryAmount;
 import org.javamoney.moneta.Money;
 
 public class ATM {
-
+	
+	private Bank MyBank;
 	private int minWithdrawPerTransaction;
 	private int maxWithdrawPerTransaction;
 	private int maxWithdrawPerDayAccount;
 	private int limitTimeForOperation;	
-	private int cardSerialNumber;
-	private int cardBankCode;	
+	private int cardSerialNumber;	
 	private CashDispenser MyCashDispenser;
 	private CardReader MyCardReader;	
 	private Display MyDisplay;
+	private OperatorPanel MyOperatorPanel;
 	
 	//After ATM is created set state to IDLE
-	public ATM() {
+	public ATM(Bank aBank) {
+		this.MyBank = aBank;
 		this.MyCashDispenser = new CashDispenser(new Log());
 		this.MyCardReader = new CardReader(this);		
 		this.MyDisplay = new Display();
+		this.MyOperatorPanel = new OperatorPanel(this);
 		this.callStateOFF();		
 	}
 	//ATM Func. REQ 1
@@ -32,6 +35,7 @@ public class ATM {
 		this.minWithdrawPerTransaction = minWithdrawPerTransaction;
 		this.maxWithdrawPerTransaction = maxWithdrawPerTransaction;
 		this.maxWithdrawPerDayAccount = maxWithdrawPerDayAccount;
+		new Log().logSend("ATM is initialized");
 	}	
 
 	//***************State functions started**********************
@@ -39,8 +43,7 @@ public class ATM {
 		new Log().logSend("Turned off");
 	}
 	//ATM Func. REQ 2
-	public void callStateIDLE() {
-		new Log().logSend("ATM is initialized");
+	public void callStateIDLE() {		
 		MyDisplay.display("Initial screen, waiting for a card to be inserted");
 	}
 	public void callStateREADING_CARD() {
@@ -55,8 +58,7 @@ public class ATM {
 			}
 			else {
 				//ATM Func. REQ 5
-				this.cardSerialNumber = insertedCard.getSerialNumber();
-				this.cardBankCode = insertedCard.getBankCode();
+				this.cardSerialNumber = insertedCard.getSerialNumber();				
 				//ATM Func. REQ 6
 				new Log().logSend("Card serial number : " + cardSerialNumber);
 				this.callStateWAITING_PASSWORD();
@@ -72,24 +74,24 @@ public class ATM {
 		new Log().logSend("Card is read successfully");
 		//ATM Func REQ 7
 		String password = MyDisplay.readPIN("Please type your password");		
-		String response = this.verify(password);
+		String response = this.verify(password, cardSerialNumber);
 		
 		//ATM Func REQ 9
-		if(response == "account ok") {			
+		if(response.equals("account ok")) {			
 			callStateCHOOSE_TRANSACTION();			
 		//ATM Func REQ 8
-		} else if(response == "bad password") {
+		} else if(response.equals("bad password")) {
 			MyDisplay.display("Password is wrong");
 			callStateEJECTING_CARD();
 		//ATM Func REQ 10
 		} else if(response == "keep the card") {
 			callStateRETAINING_CARD();
 		//ATM Func REQ 8	
-		} else if(response == "bad bank code") {
+		} else if(response.equals("bad bank code")) {
 			MyDisplay.display("Bank code is wrong");
 			callStateEJECTING_CARD();
 		//ATM Func REQ 8	
-		} else if(response == "bad account") {
+		} else if(response.equals("bad account")) {
 			MyDisplay.display("Some problem with account");
 			callStateEJECTING_CARD();
 			
@@ -101,7 +103,7 @@ public class ATM {
 		
 	}
 	public void callStateCHOOSE_TRANSACTION() {
-		System.out.println("Reading a card");
+		System.out.println("Transaction");
 	}
 	public void callStatePERFORMING_TRANSACTION() {
 		System.out.println("Reading a card");
@@ -112,6 +114,7 @@ public class ATM {
 	public void callStateEJECTING_CARD() {
 		MyDisplay.display("Ejecting the card");
 		MyCardReader.ejectCard();
+		callStateIDLE(); //Session completed return to idle
 	}
 	//ATM Func REQ 10
 	public void callStateRETAINING_CARD() {
@@ -122,9 +125,8 @@ public class ATM {
 	//***************State functions ended**********************
 	
 	//ATM Func REQ 7, authorization by bank
-	public String verify(String password) {
-		//Call a bank computer function with password and cardSerialNumber
-		return "account ok";
+	public String verify(String password, int cardSerialNumber) {
+		return MyBank.verifyRequest(password, cardSerialNumber);
 	}
 
 	public void readAccountNum(int accountNum) {
@@ -153,6 +155,9 @@ public class ATM {
 	public LocalDateTime checkTime() {
 		// TODO - implement ATM.checkTime
 		return LocalDateTime.now();
+	}
+	public OperatorPanel getMyOperatorPanel() {
+		return this.MyOperatorPanel;
 	}
 
 }

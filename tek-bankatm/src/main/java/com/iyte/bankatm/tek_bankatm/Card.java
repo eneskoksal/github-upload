@@ -5,7 +5,6 @@ import java.time.LocalDate;
 public class Card {
 
 	private int serialNumber;
-	private int bankCode;
 	private LocalDate expireDate;
 	
 	public Card(int serialNumber, LocalDate expireDate) {
@@ -16,10 +15,7 @@ public class Card {
 	public int getSerialNumber() {
 		return this.serialNumber;
 	}
-	public int getBankCode() {
-		return this.bankCode;
-	}
-	
+		
 	public LocalDate getExpireDate() {
 		return this.expireDate;
 	}
