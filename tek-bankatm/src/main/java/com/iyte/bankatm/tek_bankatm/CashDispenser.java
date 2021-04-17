@@ -45,7 +45,8 @@ public class CashDispenser {
 	 */
 	public void dispenseCash(MonetaryAmount amount) {
 		// TODO - implement CashDispenser.dispenseCash
-		throw new UnsupportedOperationException();
+		this.cashOnHand = this.cashOnHand.subtract(amount);
+		//throw new UnsupportedOperationException();
 	}
 
 	public void putCash() {

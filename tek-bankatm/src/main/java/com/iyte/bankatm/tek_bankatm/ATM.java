@@ -9,8 +9,29 @@ import org.javamoney.moneta.Money;
 public class ATM {
 	
 	private Bank MyBank;
+	public Bank getMyBank() {
+		return MyBank;
+	}
+	public void setMyBank(Bank myBank) {
+		MyBank = myBank;
+	}
+
 	private int minWithdrawPerTransaction;
 	private int maxWithdrawPerTransaction;
+	public int getMinWithdrawPerTransaction() {
+		return minWithdrawPerTransaction;
+	}
+	public void setMinWithdrawPerTransaction(int minWithdrawPerTransaction) {
+		this.minWithdrawPerTransaction = minWithdrawPerTransaction;
+	}
+
+	public int getMaxWithdrawPerTransaction() {
+		return maxWithdrawPerTransaction;
+	}
+	public void setMaxWithdrawPerTransaction(int maxWithdrawPerTransaction) {
+		this.maxWithdrawPerTransaction = maxWithdrawPerTransaction;
+	}
+
 	private int maxWithdrawPerDayAccount;
 	private int limitTimeForOperation;	
 	private int cardSerialNumber;	
@@ -18,6 +39,7 @@ public class ATM {
 	private CardReader MyCardReader;	
 	private Display MyDisplay;
 	private OperatorPanel MyOperatorPanel;
+	private ATMstate state;
 	
 	//After ATM is created set state to IDLE
 	public ATM(Bank aBank) {
@@ -46,6 +68,7 @@ public class ATM {
 	public void callStateIDLE() {		
 		MyDisplay.display("Initial screen, waiting for a card to be inserted");
 	}
+	
 	public void callStateREADING_CARD() {
 		new Log().logSend("Reading a card");
 		Card insertedCard = MyCardReader.readCard();
@@ -70,6 +93,7 @@ public class ATM {
 			this.callStateEJECTING_CARD();
 		}
 	}
+	
 	public void callStateWAITING_PASSWORD() {
 		new Log().logSend("Card is read successfully");
 		//ATM Func REQ 7
@@ -102,19 +126,23 @@ public class ATM {
 		
 		
 	}
+	
 	public void callStateCHOOSE_TRANSACTION() {
 		System.out.println("Transaction");
+		//MyDisplay.display("Reading a card:\nOnly withdrawal is offered.\n");
+		this.state = ATMstate.CHOOSE_TRANSACTION;
 	}
 	public void callStatePERFORMING_TRANSACTION() {
 		System.out.println("Reading a card");
 	}
 	public void callStatePRINTING_RECEIPT() {
-		System.out.println("Reading a card");
+		System.out.println("Printing Receipt");
 	}
 	public void callStateEJECTING_CARD() {
 		MyDisplay.display("Ejecting the card");
 		MyCardReader.ejectCard();
 		callStateIDLE(); //Session completed return to idle
+		MyDisplay.display("You should take your card");
 	}
 	//ATM Func REQ 10
 	public void callStateRETAINING_CARD() {
@@ -158,6 +186,13 @@ public class ATM {
 	}
 	public OperatorPanel getMyOperatorPanel() {
 		return this.MyOperatorPanel;
+	}
+	
+	public ATMstate getState() {
+		return this.state;
+	}
+	public void dispenseCash(MonetaryAmount Amount) {
+		this.MyCashDispenser.dispenseCash(Amount);
 	}
 
 }

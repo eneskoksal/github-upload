@@ -16,6 +16,7 @@ public class Transfer extends Transaction {
 	 * @param pin
 	 */
 	public Transfer(ATM atm, Session session, Card card, int pin) {
+		super(atm, card);
 		// TODO - implement Transfer.Transfer
 		throw new UnsupportedOperationException();
 	}

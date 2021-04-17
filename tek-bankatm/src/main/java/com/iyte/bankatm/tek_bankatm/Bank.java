@@ -1,6 +1,7 @@
 package com.iyte.bankatm.tek_bankatm;
 
 import java.time.LocalDate;
+import java.util.Random;
 import java.util.Scanner;
 
 import javax.money.MonetaryAmount;
@@ -41,6 +42,17 @@ public class Bank {
 		//Account which is connected with this card serial number has not found 
 		return "bad bank code";
 	}
+	
+	public String verifyTransaction() {        
+		Random rand = new Random();
+		int rand2 = rand.nextInt();
+		if(rand2%2 == 0)
+			return "transaction succeeded";
+		else
+			return "transaction not successful";
+				
+	}
+	
 	public void createNewAccount(int account_number,String password, int accountType, int serialNumber, LocalDate expireDate){
 		Account newAccount = new Account();
 		newAccount.setAccount_number(account_number);
@@ -52,5 +64,15 @@ public class Bank {
 	
 	public ATM getMyATM() {
 		return this.MyATM;
+	}
+
+	public Account verifyAccountNumber(int accountNumber) {
+		// TODO Auto-generated method stub
+		return this.MyDatabaseProxy.selectAccountByAccountNumber(accountNumber);
+	}
+
+	public void startTransfer(double Amount) {
+		// TODO Auto-generated method stub
+		
 	}
 }

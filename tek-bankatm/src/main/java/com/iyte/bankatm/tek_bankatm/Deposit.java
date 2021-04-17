@@ -16,6 +16,8 @@ public class Deposit extends Transaction {
 	 */
 	public Deposit(ATM atm, Session session, Card card, int pin) {
 		// TODO - implement Deposit.Deposit
+
+		super(atm, card);
 		throw new UnsupportedOperationException();
 	}
 

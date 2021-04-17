@@ -4,6 +4,12 @@ import javax.money.MonetaryAmount;
 
 public class Withdrawal extends Transaction {
 
+	public Withdrawal(ATM atm,Session session, Card card, int pin) {
+		super(atm, card);
+		throw new UnsupportedOperationException();
+		// TODO Auto-generated constructor stub
+	}
+
 	private int from;
 	private MonetaryAmount amount;
 
@@ -14,11 +20,7 @@ public class Withdrawal extends Transaction {
 	 * @param card
 	 * @param pin
 	 */
-	public Withdrawal(ATM atm, Session session, Card card, int pin) {
-		// TODO - implement Withdrawal.Withdrawal
-		throw new UnsupportedOperationException();
-	}
-
+	
 	public Message getSpecificsFromCustomer() {
 		// TODO - implement Withdrawal.getSpecificsFromCustomer
 		throw new UnsupportedOperationException();

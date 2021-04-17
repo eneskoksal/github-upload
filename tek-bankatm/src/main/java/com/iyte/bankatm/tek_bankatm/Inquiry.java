@@ -13,6 +13,7 @@ public class Inquiry extends Transaction {
 	 */
 	public Inquiry(ATM atm, Session session, Card card, int pin) {
 		// TODO - implement Inquiry.Inquiry
+		super(atm, card);
 		throw new UnsupportedOperationException();
 	}
 
