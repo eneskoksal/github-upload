@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 import javax.money.MonetaryAmount;
 
+import org.javamoney.moneta.Money;
+
 public class Bank {
 	private DatabaseProxy MyDatabaseProxy;
 	private ATM MyATM;
@@ -43,23 +45,26 @@ public class Bank {
 		return "bad bank code";
 	}
 	
-	public String verifyTransaction() {        
-		Random rand = new Random();
-		int rand2 = rand.nextInt();
-		if(rand2%2 == 0)
-			return "transaction succeeded";
-		else
-			return "transaction not successful";
-				
+	public String verifyTransaction(Account AccountToWithdrawal, MonetaryAmount Amount ) { 
+		MonetaryAmount Balance = AccountToWithdrawal.getBalance();
+		System.out.println(Balance.getNumber());
+		if(Balance.isLessThan(Amount) || AccountToWithdrawal.getLeftMaxWithdrawPerDay().isLessThan(Amount) ){
+			return "transaction failed"; // Bank Func REQ 7
+		}
+
+		AccountToWithdrawal.setBalance(Balance.subtract(Amount)); // Bank Func REQ 8
+		AccountToWithdrawal.setLeftMaxWithdrawPerDay(Amount);  // Bank Func REQ 9
+		return "transaction succeeded";
 	}
 	
-	public void createNewAccount(int account_number,String password, int accountType, int serialNumber, LocalDate expireDate){
-		Account newAccount = new Account();
+	public Account createNewAccount(int account_number,String password, int accountType, int serialNumber, LocalDate expireDate){
+		Account newAccount = new Account(this.MyATM.getMaxWithdrawPerDayAccount());
 		newAccount.setAccount_number(account_number);
 		newAccount.setAccountType(accountType);
 		newAccount.setMyCard(new Card(serialNumber, expireDate));		
 		newAccount.setPassword(password);
 		MyDatabaseProxy.createNewAccount(newAccount);
+		return newAccount;
 	}
 	
 	public ATM getMyATM() {

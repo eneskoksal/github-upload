@@ -18,7 +18,7 @@ public class OperatorPanel {
 	}
 	//ATM Func. REQ 1
 	public void initializeATM(MonetaryAmount initAmount, int minWithdrawPerTransaction, 
-			int maxWithdrawPerTransaction, int maxWithdrawPerDayAccount) {		
+			int maxWithdrawPerTransaction, MonetaryAmount maxWithdrawPerDayAccount) {		
 		this.atm.setInitialParameters(initAmount, minWithdrawPerTransaction, 
 				maxWithdrawPerTransaction, maxWithdrawPerDayAccount);
 		this.atm.callStateIDLE();		

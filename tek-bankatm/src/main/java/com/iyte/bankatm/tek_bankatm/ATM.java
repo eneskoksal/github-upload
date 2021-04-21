@@ -32,7 +32,14 @@ public class ATM {
 		this.maxWithdrawPerTransaction = maxWithdrawPerTransaction;
 	}
 
-	private int maxWithdrawPerDayAccount;
+	private MonetaryAmount maxWithdrawPerDayAccount;
+	public MonetaryAmount getMaxWithdrawPerDayAccount() {
+		return maxWithdrawPerDayAccount;
+	}
+	public void setMaxWithdrawPerDayAccount(MonetaryAmount maxWithdrawPerDayAccount) {
+		this.maxWithdrawPerDayAccount = maxWithdrawPerDayAccount;
+	}
+
 	private int limitTimeForOperation;	
 	private int cardSerialNumber;	
 	private CashDispenser MyCashDispenser;
@@ -52,7 +59,7 @@ public class ATM {
 	}
 	//ATM Func. REQ 1
 	public void setInitialParameters(MonetaryAmount initAmount, int minWithdrawPerTransaction, 
-			int maxWithdrawPerTransaction, int maxWithdrawPerDayAccount) {
+			int maxWithdrawPerTransaction, MonetaryAmount maxWithdrawPerDayAccount) {
 		this.MyCashDispenser.setInitialCash(initAmount);
 		this.minWithdrawPerTransaction = minWithdrawPerTransaction;
 		this.maxWithdrawPerTransaction = maxWithdrawPerTransaction;

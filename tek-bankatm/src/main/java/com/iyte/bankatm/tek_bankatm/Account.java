@@ -12,12 +12,25 @@ public class Account {
 	private int accountType;
 	private Card myCard;
 	private int wrongPasswordCount;
+	private MonetaryAmount LeftMaxWithdrawPerDay;
 	
-	public Account() {
+	public Account(MonetaryAmount maxWithdrawPerDayAccount ) {
 		this.wrongPasswordCount = 0;
 		this.balance = Money.of(0, "USD");
+		this.LeftMaxWithdrawPerDay = maxWithdrawPerDayAccount;
 	}
 	
+	
+	public MonetaryAmount getLeftMaxWithdrawPerDay() {
+		return LeftMaxWithdrawPerDay;
+	}
+
+
+	public void setLeftMaxWithdrawPerDay(MonetaryAmount leftMaxWithdrawPerDay) {
+		LeftMaxWithdrawPerDay.subtract(leftMaxWithdrawPerDay);
+	}
+
+
 	public int getAccount_number() {
 		return account_number;
 	}

@@ -18,9 +18,11 @@ public class App
     	Bank EnesBank = new Bank();
         ATM theATM = EnesBank.getMyATM();
         OperatorPanel theOP = theATM.getMyOperatorPanel();
-        EnesBank.createNewAccount(1234, "123", 0, 33333, LocalDate.of(2022, 1, 8));
-        EnesBank.createNewAccount(4321, "122", 0, 33333, LocalDate.of(2022, 1, 8));
-        theOP.initializeATM(Money.of(1234567.98, "USD"), 20, 2000, 3500);
+        MonetaryAmount maxWithdrawPerDayAccount = Money.of(4000, "USD");
+        theOP.initializeATM(Money.of(1234567.98, "USD"), 20, 20000, maxWithdrawPerDayAccount);
+        Account MainAccount = EnesBank.createNewAccount(1234, "123", 0, 33333, LocalDate.of(2022, 1, 8));
+        Account SecondaryAccount = EnesBank.createNewAccount(4321, "122", 0, 33333, LocalDate.of(2022, 1, 8));
+        MainAccount.setBalance(Money.of(1500, "USD"));
         MonetaryAmount initFund = theOP.getInitialCash();
         System.out.println("Amount of money in atm: " + initFund);        
         CurrencyUnit currency = initFund.getCurrency();
@@ -32,9 +34,12 @@ public class App
         	Transaction anyTransaction = new Transaction(theATM, theCard);
         	anyTransaction.setOfferedTransaction("Withdrawal");
         	anyTransaction.setOfferedTransaction("Transfer");
+        	anyTransaction.setAccount(MainAccount);
         	anyTransaction.ListOfferedTransaction();
         	Scanner ChooseTransaction = new Scanner(System.in);
-        	if(ChooseTransaction.nextLine() == "w"){
+        	String Option  =  ChooseTransaction.nextLine();
+        	if(Option.charAt(0) == 'w'){
+        		anyTransaction.setType(TransactionTypes.Withdrawal);
 	        	anyTransaction.readAmount();
 	        	Boolean IsVerifed = anyTransaction.verify();
 	        	if(IsVerifed) {
@@ -45,6 +50,7 @@ public class App
 	        		
 	        	}
         	}else {
+        		anyTransaction.setType(TransactionTypes.Transfer);
         		Account toTransefer = anyTransaction.readAccountNumber();
         		if(toTransefer != null) {
     	        	anyTransaction.readAmount();;

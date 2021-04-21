@@ -6,6 +6,7 @@ import javax.money.MonetaryAmount;
 import org.javamoney.moneta.Money;
 
 
+
 public class Transaction {
 
 	protected ATM atm;
@@ -16,8 +17,26 @@ public class Transaction {
 	private ArrayList<String> OfferedTransactions;
 	private Scanner MyKeyboard;
 	private double Amount; //will be replaced
-	private int AccountNumber;
+	private Account Account;
+	public Account getAccount() {
+		return Account;
+	}
+
+	public void setAccount(Account account) {
+		Account = account;
+	}
+
+
 	private int ToAccountNumber;
+	private TransactionTypes Type;
+	public TransactionTypes getType() {
+		return Type;
+	}
+
+	public void setType(TransactionTypes type) {
+		Type = type;
+	}
+
 	public Transaction(ATM atm, Card Card) {
 		this.OfferedTransactions = new ArrayList<String>();
 		this.MyKeyboard = new Scanner(System.in);
@@ -52,6 +71,7 @@ public class Transaction {
 		if(atm.getMaxWithdrawPerTransaction()  > this.Amount)
 			return true;
 		//ATM Func REQ 11
+		System.out.println("--- " + atm.getMaxWithdrawPerTransaction());
 		return false;
 		
 	}
@@ -63,7 +83,8 @@ public class Transaction {
 		}
 		//ATM Func REQ 12
 
-		String response = this.atm.getMyBank().verifyTransaction(); 
+		String response = this.atm.getMyBank().verifyTransaction(this.Account, Money.of(this.Amount, "USD")); 
+		
 		//ATM Func REQ 13
 		if(response == "transaction succeeded") {
 			this.atm.callStatePRINTING_RECEIPT();
@@ -88,7 +109,7 @@ public class Transaction {
 	
 	public void initiateTransfer() {
 		this.atm.getMyBank().startTransfer(this.Amount);
-		new Log().logSend(String.format("Transfer from %d to %d with Amount %f %s", this.AccountNumber, this.ToAccountNumber, this.Amount, "USD"));
+		new Log().logSend(String.format("Transfer from %d to %d with Amount %f %s", this.Account.getAccount_number(), this.ToAccountNumber, this.Amount, "USD"));
 		
 		
 	}
