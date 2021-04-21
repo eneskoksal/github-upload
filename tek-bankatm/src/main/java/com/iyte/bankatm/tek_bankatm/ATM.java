@@ -47,6 +47,7 @@ public class ATM {
 	private Display MyDisplay;
 	private OperatorPanel MyOperatorPanel;
 	private ATMstate state;
+	private Card insertedCard;
 	
 	//After ATM is created set state to IDLE
 	public ATM(Bank aBank) {
@@ -74,12 +75,14 @@ public class ATM {
 	//ATM Func. REQ 2
 	public void callStateIDLE() {		
 		MyDisplay.display("Initial screen, waiting for a card to be inserted");
+		
 	}
 	
 	public void callStateREADING_CARD() {
 		new Log().logSend("Reading a card");
-		Card insertedCard = MyCardReader.readCard();
-		if (insertedCard != null) {
+		insertedCard = MyCardReader.readCard();
+		boolean isCashAvail = checkAvailabilityOfCashInATM();
+		if (insertedCard != null && isCashAvail) {
 			//ATM Func REQ 4
 			LocalDate today = LocalDate.now();
 			if(insertedCard.getExpireDate().compareTo(today) < 0) {
@@ -94,11 +97,17 @@ public class ATM {
 				this.callStateWAITING_PASSWORD();
 			}
 		}
-		else {
+		//ATM Func. REQ 3
+		else if(!isCashAvail) {
+			MyDisplay.display("Not enough money in the ATM");
+			this.callStateEJECTING_CARD();
+		}
+		else{
 			//ATM Func REQ 4
 			MyDisplay.display("The information on the card can't be read");
 			this.callStateEJECTING_CARD();
 		}
+		
 	}
 	
 	public void callStateWAITING_PASSWORD() {
@@ -136,8 +145,46 @@ public class ATM {
 	
 	public void callStateCHOOSE_TRANSACTION() {
 		System.out.println("Transaction");
-		//MyDisplay.display("Reading a card:\nOnly withdrawal is offered.\n");
-		this.state = ATMstate.CHOOSE_TRANSACTION;
+		
+		Transaction anyTransaction = new Transaction(this, this.insertedCard);
+    	anyTransaction.setOfferedTransaction("Withdrawal");
+    	anyTransaction.setOfferedTransaction("Transfer");
+    	anyTransaction.setAccount(insertedCard.getSerialNumber());
+    	anyTransaction.ListOfferedTransaction();
+    	Scanner ChooseTransaction = new Scanner(System.in);
+    	String Option  =  ChooseTransaction.nextLine();
+    	//ChooseTransaction.close();
+    	if(Option.charAt(0) == 'w'){
+    		anyTransaction.setType(TransactionTypes.Withdrawal);
+        	anyTransaction.readAmount();
+        	Boolean IsVerifed = anyTransaction.verify();
+        	if(IsVerifed) {
+        		System.out.println("It's ok!");
+        		anyTransaction.initiateSequence();
+        	}else{
+        		System.out.println("It's nok!");
+        		
+        	}
+    	}else {
+    		anyTransaction.setType(TransactionTypes.Transfer);
+    		Account toTransefer = anyTransaction.readAccountNumber();
+    		if(toTransefer != null) {
+	        	anyTransaction.readAmount();;
+	        	Boolean IsVerifed = anyTransaction.verify();
+	        	if(IsVerifed) {
+	        		anyTransaction.initiateTransfer();
+	        		System.out.println("Transfer is completed");
+	        	}else {
+
+	        		System.out.println("It's nok!");
+	        	}
+	    		//ATM Func REQ 17
+    		}
+    		else {
+    			System.out.println("Invalid Account!");
+    		}
+    		
+    	}
 	}
 	public void callStatePERFORMING_TRANSACTION() {
 		System.out.println("Reading a card");
@@ -172,11 +219,13 @@ public class ATM {
 	public void userInsertedCard(Card aCard) {
 		MyCardReader.insertCard(aCard);
 	}
-	public Message checkAvailabilityOfCashInATM(MonetaryAmount xmoney) {		
-		if(MyCashDispenser.checkCashOnHand(xmoney)) {
-			//?
+	public boolean checkAvailabilityOfCashInATM() {
+		MonetaryAmount current = getCashOnHand();
+		System.out.println(current);
+		if(current.isGreaterThan(Money.of(0, "USD")) ) {
+			return true;
 		}			
-		return new Message();
+		return false;
 	}
 	public MonetaryAmount getCashOnHand() {
 		return this.MyCashDispenser.getCashOnHand();
@@ -186,15 +235,12 @@ public class ATM {
 		// TODO - implement ATM.verifyInputAmount
 		throw new UnsupportedOperationException();
 	}
-
-	public LocalDateTime checkTime() {
-		// TODO - implement ATM.checkTime
+	public LocalDateTime checkTime() {		
 		return LocalDateTime.now();
 	}
 	public OperatorPanel getMyOperatorPanel() {
 		return this.MyOperatorPanel;
-	}
-	
+	}	
 	public ATMstate getState() {
 		return this.state;
 	}

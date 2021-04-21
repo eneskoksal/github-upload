@@ -30,46 +30,6 @@ public class App
         System.out.println("Amount of money in atm: " + numberValue + " " + currency);
         Card theCard = new Card(33333, LocalDate.of(2022, 1, 8));
         theATM.userInsertedCard(theCard);    
-        if(theATM.getState() == ATMstate.CHOOSE_TRANSACTION) {
-        	Transaction anyTransaction = new Transaction(theATM, theCard);
-        	anyTransaction.setOfferedTransaction("Withdrawal");
-        	anyTransaction.setOfferedTransaction("Transfer");
-        	anyTransaction.setAccount(MainAccount);
-        	anyTransaction.ListOfferedTransaction();
-        	Scanner ChooseTransaction = new Scanner(System.in);
-        	String Option  =  ChooseTransaction.nextLine();
-        	if(Option.charAt(0) == 'w'){
-        		anyTransaction.setType(TransactionTypes.Withdrawal);
-	        	anyTransaction.readAmount();
-	        	Boolean IsVerifed = anyTransaction.verify();
-	        	if(IsVerifed) {
-	        		System.out.println("It's ok!");
-	        		anyTransaction.initiateSequence();
-	        	}else{
-	        		System.out.println("It's nok!");
-	        		
-	        	}
-        	}else {
-        		anyTransaction.setType(TransactionTypes.Transfer);
-        		Account toTransefer = anyTransaction.readAccountNumber();
-        		if(toTransefer != null) {
-    	        	anyTransaction.readAmount();;
-    	        	Boolean IsVerifed = anyTransaction.verify();
-    	        	if(IsVerifed) {
-    	        		anyTransaction.initiateTransfer();
-    	        		System.out.println("Transfer is completed");
-    	        	}else {
-
-    	        		System.out.println("It's nok!");
-    	        	}
-    	    		//ATM Func REQ 17
-        		}
-        		else {
-        			System.out.println("Invalid Account!");
-        		}
-        		
-        		
-        	}
-        }
+        
     }
 }

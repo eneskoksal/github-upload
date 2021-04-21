@@ -22,8 +22,8 @@ public class Transaction {
 		return Account;
 	}
 
-	public void setAccount(Account account) {
-		Account = account;
+	public void setAccount(int serialNumber) {
+		Account = this.atm.getMyBank().getAccountNumberBySerialNumber(serialNumber);
 	}
 
 
@@ -53,13 +53,15 @@ public class Transaction {
 	}
 	
 	public void ListOfferedTransaction() {
+		System.out.println("Please choose your action");
 		for(int index = 0; index < this.OfferedTransactions.size(); index++) {
 			System.out.println(this.OfferedTransactions.get(index));
 		}		
 	}
 	public void readAmount() {
 		System.out.println("Enter the amount");
-		this.Amount =  Double.parseDouble(MyKeyboard.nextLine());
+		String inputAmount = MyKeyboard.nextLine();
+		this.Amount =  Double.parseDouble(inputAmount);
 	}
 	
 	public Account readAccountNumber() {
@@ -93,6 +95,7 @@ public class Transaction {
 			//ATM Func REQ 14
 
 			new Log().logSend(String.format("Card with %d serial code dispensed %f %s", this.card.getSerialNumber(), this.Amount, "USD"));
+			System.out.println("New Balance: " + Account.getBalance());
 			//ATM Func REQ 15  "Response sent to bank for money dispensed." ???
 			
 

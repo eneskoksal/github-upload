@@ -46,12 +46,10 @@ public class Bank {
 	}
 	
 	public String verifyTransaction(Account AccountToWithdrawal, MonetaryAmount Amount ) { 
-		MonetaryAmount Balance = AccountToWithdrawal.getBalance();
-		System.out.println(Balance.getNumber());
+		MonetaryAmount Balance = AccountToWithdrawal.getBalance();		
 		if(Balance.isLessThan(Amount) || AccountToWithdrawal.getLeftMaxWithdrawPerDay().isLessThan(Amount) ){
 			return "transaction failed"; // Bank Func REQ 7
 		}
-
 		AccountToWithdrawal.setBalance(Balance.subtract(Amount)); // Bank Func REQ 8
 		AccountToWithdrawal.setLeftMaxWithdrawPerDay(Amount);  // Bank Func REQ 9
 		return "transaction succeeded";
@@ -74,6 +72,9 @@ public class Bank {
 	public Account verifyAccountNumber(int accountNumber) {
 		// TODO Auto-generated method stub
 		return this.MyDatabaseProxy.selectAccountByAccountNumber(accountNumber);
+	}
+	public Account getAccountNumberBySerialNumber(int serialNumber) {
+		return MyDatabaseProxy.selectAccountByCardSerialNo(serialNumber);
 	}
 
 	public void startTransfer(double Amount) {
