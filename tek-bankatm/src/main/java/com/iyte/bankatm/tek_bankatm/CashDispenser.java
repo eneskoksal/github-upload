@@ -43,10 +43,8 @@ public class CashDispenser {
 	 * 
 	 * @param amount
 	 */
-	public void dispenseCash(MonetaryAmount amount) {
-		// TODO - implement CashDispenser.dispenseCash
-		this.cashOnHand = this.cashOnHand.subtract(amount);
-		//throw new UnsupportedOperationException();
+	public void dispenseCash(MonetaryAmount amount) {		
+		this.cashOnHand = this.cashOnHand.subtract(amount);		
 	}
 
 	public void putCash() {

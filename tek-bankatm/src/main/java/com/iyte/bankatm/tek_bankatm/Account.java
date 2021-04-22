@@ -25,12 +25,10 @@ public class Account {
 		return LeftMaxWithdrawPerDay;
 	}
 
-
 	public void setLeftMaxWithdrawPerDay(MonetaryAmount leftMaxWithdrawPerDay) {
 		LeftMaxWithdrawPerDay.subtract(leftMaxWithdrawPerDay);
 	}
-
-
+	
 	public int getAccount_number() {
 		return account_number;
 	}

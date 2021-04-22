@@ -1,5 +1,6 @@
 package com.iyte.bankatm.tek_bankatm;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.money.MonetaryAmount;
@@ -35,18 +36,27 @@ public class Display {
 	 * @param prompt
 	 * @param menu
 	 */
-	public int readMenuChoice(String prompt, String[] menu) {
-		// TODO - implement Display.readMenuChoice
-		throw new UnsupportedOperationException();
+	public String readMenuChoice(ArrayList<String> menu) {
+		this.display("Please choose your action");
+		for(int index = 0; index < menu.size(); index++) {
+			this.display(menu.get(index));
+		}
+		return MyKeyboard.nextLine();
+	}
+	
+	public int typedAccountNumber() {
+		this.display("Enter the Account Number");		
+		return Integer.parseInt(MyKeyboard.nextLine());
 	}
 
 	/**
 	 * 
 	 * @param prompt
 	 */
-	public MonetaryAmount readAmount(String prompt) {
-		// TODO - implement Display.readAmount
-		throw new UnsupportedOperationException();
+	public double readAmount() {
+		this.display("Enter the amount");		
+		String inputAmount = MyKeyboard.nextLine();
+		return Double.parseDouble(inputAmount);
 	}
 
 }

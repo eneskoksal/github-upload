@@ -11,12 +11,10 @@ import org.javamoney.moneta.Money;
 public class Bank {
 	private DatabaseProxy MyDatabaseProxy;
 	private ATM MyATM;
-	private Scanner MyKeyboard;
 	
 	public Bank() {
 		this.MyDatabaseProxy = new DatabaseProxy();
-		this.MyATM = new ATM(this);
-		this.MyKeyboard = new Scanner(System.in);
+		this.MyATM = new ATM(this);		
 	}
 	
 	public String verifyRequest(String password, int cardSerialNumber) {
@@ -28,14 +26,14 @@ public class Bank {
 				return "bad account";
 			//Bank Func REQ 3 & 4 & 6
 			}else if(expectedPassword.equals(password)) {
-				MyDatabaseProxy.setWrongPasswordCount(theAccount.getAccount_number(), 0);
+				MyDatabaseProxy.setWrongPasswordCount(cardSerialNumber, 0);
 				return "account ok";
 			}else {
-				int wrongAttempt = MyDatabaseProxy.getWrongPasswordCount(theAccount.getAccount_number());				
+				int wrongAttempt = MyDatabaseProxy.getWrongPasswordCount(cardSerialNumber);				
 				if(wrongAttempt >= 3) { //In fourth wrong attempt(index = 3) keep the card
 					return "keep the card";
 				}else {					
-					MyDatabaseProxy.setWrongPasswordCount(theAccount.getAccount_number(), ++wrongAttempt);
+					MyDatabaseProxy.setWrongPasswordCount(cardSerialNumber, ++wrongAttempt);
 					return "bad password";
 				}				
 			}			
@@ -45,14 +43,26 @@ public class Bank {
 		return "bad bank code";
 	}
 	
-	public String verifyTransaction(Account AccountToWithdrawal, MonetaryAmount Amount ) { 
-		MonetaryAmount Balance = AccountToWithdrawal.getBalance();		
-		if(Balance.isLessThan(Amount) || AccountToWithdrawal.getLeftMaxWithdrawPerDay().isLessThan(Amount) ){
+	public String verifyTransaction(int cardSerialNumber, MonetaryAmount Amount ) {
+		Account findAccount = MyDatabaseProxy.selectAccountByCardSerialNo(cardSerialNumber);
+		MonetaryAmount Balance = findAccount.getBalance();		
+		if(Balance.isGreaterThanOrEqualTo(Amount) && 
+				findAccount.getLeftMaxWithdrawPerDay().isGreaterThanOrEqualTo(Amount))
+		{			
+			return "transaction succeeded";
+		}
+		else {
+			if(Balance.isLessThan(Amount))
+				MyATM.getMyDisplay().display("Balance is not enough: " + Balance);
+			if(findAccount.getLeftMaxWithdrawPerDay().isLessThan(Amount))
+				MyATM.getMyDisplay().display("Max withdraw limit is exceeded: " + findAccount.getLeftMaxWithdrawPerDay());
 			return "transaction failed"; // Bank Func REQ 7
 		}
-		AccountToWithdrawal.setBalance(Balance.subtract(Amount)); // Bank Func REQ 8
-		AccountToWithdrawal.setLeftMaxWithdrawPerDay(Amount);  // Bank Func REQ 9
-		return "transaction succeeded";
+	}
+	public void updateAccount(int cardSerialNumber, MonetaryAmount Amount) {		
+		MyDatabaseProxy.minusBalance(cardSerialNumber, Amount); // Bank Func REQ 8
+		MyDatabaseProxy.setLeftMaxWithdrawPerDay(cardSerialNumber, Amount);  // Bank Func REQ 9
+		MyATM.getMyDisplay().display("New Balance: " + MyDatabaseProxy.selectAccountByCardSerialNo(cardSerialNumber).getBalance());
 	}
 	
 	public Account createNewAccount(int account_number,String password, int accountType, int serialNumber, LocalDate expireDate){
@@ -72,9 +82,6 @@ public class Bank {
 	public Account verifyAccountNumber(int accountNumber) {
 		// TODO Auto-generated method stub
 		return this.MyDatabaseProxy.selectAccountByAccountNumber(accountNumber);
-	}
-	public Account getAccountNumberBySerialNumber(int serialNumber) {
-		return MyDatabaseProxy.selectAccountByCardSerialNo(serialNumber);
 	}
 
 	public void startTransfer(double Amount) {

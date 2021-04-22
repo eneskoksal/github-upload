@@ -138,23 +138,17 @@ public class ATM {
 		} else {
 			MyDisplay.display("Unhandled exception");
 			callStateEJECTING_CARD();
-		}
-		
-		
+		}		
 	}
 	
 	public void callStateCHOOSE_TRANSACTION() {
-		System.out.println("Transaction");
-		
-		Transaction anyTransaction = new Transaction(this, this.insertedCard);
-    	anyTransaction.setOfferedTransaction("Withdrawal");
-    	anyTransaction.setOfferedTransaction("Transfer");
-    	anyTransaction.setAccount(insertedCard.getSerialNumber());
-    	anyTransaction.ListOfferedTransaction();
-    	Scanner ChooseTransaction = new Scanner(System.in);
-    	String Option  =  ChooseTransaction.nextLine();
-    	//ChooseTransaction.close();
-    	if(Option.charAt(0) == 'w'){
+		MyDisplay.display("Transaction");		
+		Transaction anyTransaction = new Transaction(this, this.insertedCard);    	    	
+    	String Option  =  MyDisplay.readMenuChoice(anyTransaction.getOfferedTransactions());
+    	callStatePERFORMING_TRANSACTION(anyTransaction, Option);
+	}
+	public void callStatePERFORMING_TRANSACTION(Transaction anyTransaction, String Option) {
+		if(Option.charAt(0) == 'w'){
     		anyTransaction.setType(TransactionTypes.Withdrawal);
         	anyTransaction.readAmount();
         	Boolean IsVerifed = anyTransaction.verify();
@@ -162,14 +156,13 @@ public class ATM {
         		System.out.println("It's ok!");
         		anyTransaction.initiateSequence();
         	}else{
-        		System.out.println("It's nok!");
-        		
+        		System.out.println("It's nok!");        		
         	}
-    	}else {
+    	}else if(Option.charAt(0) == 't') {
     		anyTransaction.setType(TransactionTypes.Transfer);
-    		Account toTransefer = anyTransaction.readAccountNumber();
-    		if(toTransefer != null) {
-	        	anyTransaction.readAmount();;
+    		Account toTransfer = anyTransaction.readAccountNumber();
+    		if(toTransfer != null) {
+	        	anyTransaction.readAmount();
 	        	Boolean IsVerifed = anyTransaction.verify();
 	        	if(IsVerifed) {
 	        		anyTransaction.initiateTransfer();
@@ -182,21 +175,20 @@ public class ATM {
     		}
     		else {
     			System.out.println("Invalid Account!");
-    		}
-    		
-    	}
-	}
-	public void callStatePERFORMING_TRANSACTION() {
-		System.out.println("Reading a card");
+    		}    		
+    	}else {
+    		MyDisplay.display("Wrong input, try again");
+    		callStateCHOOSE_TRANSACTION();
+    	}    	
 	}
 	public void callStatePRINTING_RECEIPT() {
 		System.out.println("Printing Receipt");
 	}
 	public void callStateEJECTING_CARD() {
 		MyDisplay.display("Ejecting the card");
-		MyCardReader.ejectCard();
-		callStateIDLE(); //Session completed return to idle
+		MyCardReader.ejectCard();		
 		MyDisplay.display("You should take your card");
+		callStateIDLE(); //Session completed return to idle
 	}
 	//ATM Func REQ 10
 	public void callStateRETAINING_CARD() {
@@ -221,30 +213,26 @@ public class ATM {
 	}
 	public boolean checkAvailabilityOfCashInATM() {
 		MonetaryAmount current = getCashOnHand();
-		System.out.println(current);
+		System.out.println("Total fund in the ATM "+current);
 		if(current.isGreaterThan(Money.of(0, "USD")) ) {
 			return true;
 		}			
 		return false;
 	}
-	public MonetaryAmount getCashOnHand() {
-		return this.MyCashDispenser.getCashOnHand();
-	}
-
-	public Message verifyInputAmount() {
-		// TODO - implement ATM.verifyInputAmount
-		throw new UnsupportedOperationException();
-	}
 	public LocalDateTime checkTime() {		
 		return LocalDateTime.now();
 	}
+	public MonetaryAmount getCashOnHand() {
+		return this.MyCashDispenser.getCashOnHand();
+	}	
 	public OperatorPanel getMyOperatorPanel() {
 		return this.MyOperatorPanel;
-	}	
-	public ATMstate getState() {
-		return this.state;
 	}
+	public Display getMyDisplay() {
+		return this.MyDisplay;
+	}	
 	public void dispenseCash(MonetaryAmount Amount) {
+		MyDisplay.display("Please claim your dispensed money");
 		this.MyCashDispenser.dispenseCash(Amount);
 	}
 

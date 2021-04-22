@@ -3,6 +3,8 @@ package com.iyte.bankatm.tek_bankatm;
 import java.util.ArrayList;
 import javax.money.MonetaryAmount;
 
+import org.javamoney.moneta.Money;
+
 public class DatabaseProxy {
 	
 	private ArrayList<Account> DB;
@@ -27,28 +29,30 @@ public class DatabaseProxy {
 	    }
 		return null;
 	}
-	public void setWrongPasswordCount(int accountNumber, int value) {
-		Account theAccount = selectAccountByAccountNumber(accountNumber);
+	public void setWrongPasswordCount(int cardSerialNumber, int value) {
+		Account theAccount = selectAccountByCardSerialNo(cardSerialNumber);
 		theAccount.setWrongPasswordCount(value);
 	}
-	public int getWrongPasswordCount(int accountNumber) {
-		Account theAccount = selectAccountByAccountNumber(accountNumber);
+	public int getWrongPasswordCount(int cardSerialNumber) {
+		Account theAccount = selectAccountByCardSerialNo(cardSerialNumber);
 		return theAccount.getWrongPasswordCount();
 	}
-	public void minusBalance(int accountNumber, double amount) {
-		
+	public void minusBalance(int cardSerialNumber, MonetaryAmount amount) {
+		Account findAccount = selectAccountByCardSerialNo(cardSerialNumber);
+		MonetaryAmount newBalance = findAccount.getBalance().subtract(amount);
+		findAccount.setBalance(newBalance);		
 	}
-	public void plusBalance() {
-		// TODO - implement DatabaseProxy.plusBalance
-		throw new UnsupportedOperationException();
+	public void plusBalance(int cardSerialNumber, MonetaryAmount amount ) {
+		Account findAccount = selectAccountByCardSerialNo(cardSerialNumber);
+		MonetaryAmount newBalance = findAccount.getBalance().add(amount);
+		findAccount.setBalance(newBalance);
 	}
-
+	public void setLeftMaxWithdrawPerDay(int cardSerialNumber, MonetaryAmount amount ) {
+		Account findAccount = selectAccountByCardSerialNo(cardSerialNumber);		
+		findAccount.setLeftMaxWithdrawPerDay(amount);
+	}
 	public void createNewAccount(Account newAccount) {
 		DB.add(newAccount);
-	}
-
-	public MonetaryAmount checkTheBalance(Account anAccount) {
-		return anAccount.getBalance();
 	}
 
 }
