@@ -1,12 +1,9 @@
 package com.iyte.bankatm.tek_bankatm;
 
 import java.time.LocalDate;
-import java.util.Random;
 import java.util.Scanner;
 
 import javax.money.MonetaryAmount;
-
-import org.javamoney.moneta.Money;
 
 public class Bank {
 	private DatabaseProxy MyDatabaseProxy;

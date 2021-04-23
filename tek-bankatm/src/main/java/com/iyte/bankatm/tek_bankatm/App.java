@@ -14,6 +14,11 @@ import org.javamoney.moneta.Money;
  */
 public class App 
 {
+	
+	public boolean run(){
+		return true;
+	}
+	
     public static void main( String[] args ) {
     	Bank EnesBank = new Bank();
         ATM theATM = EnesBank.getMyATM();

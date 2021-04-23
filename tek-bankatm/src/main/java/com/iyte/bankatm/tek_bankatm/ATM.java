@@ -12,9 +12,7 @@ public class ATM {
 	public Bank getMyBank() {
 		return MyBank;
 	}
-	public void setMyBank(Bank myBank) {
-		MyBank = myBank;
-	}
+
 
 	private int minWithdrawPerTransaction;
 	private int maxWithdrawPerTransaction;
@@ -46,7 +44,6 @@ public class ATM {
 	private CardReader MyCardReader;	
 	private Display MyDisplay;
 	private OperatorPanel MyOperatorPanel;
-	private ATMstate state;
 	private Card insertedCard;
 	
 	//After ATM is created set state to IDLE
@@ -62,9 +59,9 @@ public class ATM {
 	public void setInitialParameters(MonetaryAmount initAmount, int minWithdrawPerTransaction, 
 			int maxWithdrawPerTransaction, MonetaryAmount maxWithdrawPerDayAccount) {
 		this.MyCashDispenser.setInitialCash(initAmount);
-		this.minWithdrawPerTransaction = minWithdrawPerTransaction;
-		this.maxWithdrawPerTransaction = maxWithdrawPerTransaction;
-		this.maxWithdrawPerDayAccount = maxWithdrawPerDayAccount;
+		this.setMinWithdrawPerTransaction(minWithdrawPerTransaction);
+		this.setMaxWithdrawPerTransaction(maxWithdrawPerTransaction);
+		this.setMaxWithdrawPerDayAccount(maxWithdrawPerDayAccount);
 		new Log().logSend("ATM is initialized");
 	}	
 
@@ -142,7 +139,6 @@ public class ATM {
 	}
 	
 	public void callStateCHOOSE_TRANSACTION() {
-		MyDisplay.display("Transaction");		
 		Transaction anyTransaction = new Transaction(this, this.insertedCard);    	    	
     	String Option  =  MyDisplay.readMenuChoice(anyTransaction.getOfferedTransactions());
     	callStatePERFORMING_TRANSACTION(anyTransaction, Option);
@@ -180,7 +176,13 @@ public class ATM {
     		MyDisplay.display("Wrong input, try again");
     		callStateCHOOSE_TRANSACTION();
     	}    	
+    		}
+    		
+
+	public void callStatePERFORMING_TRANSACTION() {
+		System.out.println("Reading a card");
 	}
+	
 	public void callStatePRINTING_RECEIPT() {
 		System.out.println("Printing Receipt");
 	}
