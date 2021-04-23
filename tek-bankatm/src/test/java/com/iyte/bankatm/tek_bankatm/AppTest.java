@@ -32,8 +32,7 @@ public class AppTest
         assertEquals(maxWithdrawPerDayAccount, TestATM.getMaxWithdrawPerDayAccount());
         assertEquals(TestBank, TestATM.getMyBank());
         
-        TestATM.userInsertedCard(TestCard); // Enter correct password
-        
+        //TestATM.userInsertedCard(TestCard); // Enter correct password 
 
         
     }

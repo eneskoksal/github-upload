@@ -7,17 +7,11 @@ import javax.money.MonetaryAmount;
 
 public class Display {
 	
-	private Scanner MyKeyboard;
-
-	public Display() {
-		this.MyKeyboard = new Scanner(System.in);
-	}
-
 	/**
 	 * 
 	 * @param message
 	 */
-	public void display(String message) {
+	public void display(String message) {		
 		System.out.println("Display: " + message);
 	}
 
@@ -26,9 +20,11 @@ public class Display {
 	 * @param prompt
 	 */
 	public String readPIN(String prompt) {
+		Scanner MyKeyboard = new Scanner(System.in);
 		this.display(prompt);
 		String password = MyKeyboard.nextLine();
-		return password;
+		MyKeyboard.close();
+		return password;		
 	}
 
 	/**
@@ -37,16 +33,23 @@ public class Display {
 	 * @param menu
 	 */
 	public String readMenuChoice(ArrayList<String> menu) {
+		Scanner MyKeyboard = new Scanner(System.in);
 		this.display("Please choose your action");
 		for(int index = 0; index < menu.size(); index++) {
 			this.display(menu.get(index));
 		}
-		return MyKeyboard.nextLine();
+		String getInput = MyKeyboard.nextLine();
+		MyKeyboard.close();
+		return getInput;
 	}
 	
 	public int typedAccountNumber() {
+		Scanner MyKeyboard = new Scanner(System.in);
 		this.display("Enter the Account Number");		
-		return Integer.parseInt(MyKeyboard.nextLine());
+		int getInt = Integer.parseInt(MyKeyboard.nextLine());
+		MyKeyboard.close();
+		return getInt;
+		
 	}
 
 	/**
@@ -54,8 +57,10 @@ public class Display {
 	 * @param prompt
 	 */
 	public double readAmount() {
+		Scanner MyKeyboard = new Scanner(System.in);
 		this.display("Enter the amount");		
 		String inputAmount = MyKeyboard.nextLine();
+		MyKeyboard.close();
 		return Double.parseDouble(inputAmount);
 	}
 
