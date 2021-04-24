@@ -1,7 +1,5 @@
 package com.iyte.bankatm.tek_bankatm;
 import java.util.ArrayList;
-import java.util.Scanner;
-import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.Money;
 
@@ -9,8 +7,7 @@ import org.javamoney.moneta.Money;
 
 public class Transaction {
 
-	protected ATM atm;
-	protected Session session;
+	protected ATM atm;	
 	protected Card card;
 	protected int pin;
 	

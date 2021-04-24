@@ -2,20 +2,10 @@ package com.iyte.bankatm.tek_bankatm;
 
 import javax.money.MonetaryAmount;
 
-import org.javamoney.moneta.Money;
-
 public class CashDispenser {
 
-	private Log log;
 	private MonetaryAmount cashOnHand;
 
-	/**
-	 * 
-	 * @param log
-	 */
-	public CashDispenser(Log log) {
-		
-	}
 	
 	public MonetaryAmount getCashOnHand() {
 		return this.cashOnHand;
@@ -33,23 +23,9 @@ public class CashDispenser {
 	 * 
 	 * @param amount
 	 */
-	public boolean checkCashOnHand(MonetaryAmount amount) {
-		//Return true if input currencies are same and amount is less than cash on hand.
-		return (this.cashOnHand.getNumber().doubleValue() >= amount.getNumber().doubleValue()
-				&& this.cashOnHand.getCurrency() == amount.getCurrency());
-	}
-
-	/**
-	 * 
-	 * @param amount
-	 */
 	public void dispenseCash(MonetaryAmount amount) {		
 		this.cashOnHand = this.cashOnHand.subtract(amount);		
 	}
 
-	public void putCash() {
-		// TODO - implement CashDispenser.putCash
-		throw new UnsupportedOperationException();
-	}
 
 }
