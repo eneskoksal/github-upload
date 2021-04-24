@@ -48,8 +48,9 @@ public class DatabaseProxy {
 		findAccount.setBalance(newBalance);
 	}
 	public void setLeftMaxWithdrawPerDay(int cardSerialNumber, MonetaryAmount amount ) {
-		Account findAccount = selectAccountByCardSerialNo(cardSerialNumber);		
-		findAccount.setLeftMaxWithdrawPerDay(amount);
+		Account findAccount = selectAccountByCardSerialNo(cardSerialNumber);
+		MonetaryAmount newLimit = findAccount.getLeftMaxWithdrawPerDay().subtract(amount);
+		findAccount.setLeftMaxWithdrawPerDay(newLimit);
 	}
 	public void createNewAccount(Account newAccount) {
 		DB.add(newAccount);

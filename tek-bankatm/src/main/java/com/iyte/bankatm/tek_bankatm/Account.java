@@ -26,7 +26,7 @@ public class Account {
 	}
 
 	public void setLeftMaxWithdrawPerDay(MonetaryAmount leftMaxWithdrawPerDay) {
-		LeftMaxWithdrawPerDay.subtract(leftMaxWithdrawPerDay);
+		this.LeftMaxWithdrawPerDay = leftMaxWithdrawPerDay;
 	}
 	
 	public int getAccount_number() {
