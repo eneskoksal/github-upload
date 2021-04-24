@@ -1,7 +1,6 @@
 package com.iyte.bankatm.tek_bankatm;
 
 import java.time.LocalDateTime;
-import java.util.Scanner;
 import java.time.LocalDate;
 import javax.money.MonetaryAmount;
 import org.javamoney.moneta.Money;
@@ -38,7 +37,6 @@ public class ATM {
 		this.maxWithdrawPerDayAccount = maxWithdrawPerDayAccount;
 	}
 
-	private int limitTimeForOperation;	
 	private int cardSerialNumber;	
 	private CashDispenser MyCashDispenser;
 	private CardReader MyCardReader;	
@@ -49,7 +47,7 @@ public class ATM {
 	//After ATM is created set state to IDLE
 	public ATM(Bank aBank) {
 		this.MyBank = aBank;
-		this.MyCashDispenser = new CashDispenser(new Log());
+		this.MyCashDispenser = new CashDispenser();
 		this.MyCardReader = new CardReader(this);		
 		this.MyDisplay = new Display();
 		this.MyOperatorPanel = new OperatorPanel(this);

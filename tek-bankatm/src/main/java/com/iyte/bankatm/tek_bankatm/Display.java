@@ -3,8 +3,6 @@ package com.iyte.bankatm.tek_bankatm;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.money.MonetaryAmount;
-
 public class Display {
 	
 	/**

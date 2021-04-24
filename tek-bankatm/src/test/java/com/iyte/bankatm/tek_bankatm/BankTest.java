@@ -50,12 +50,12 @@ public class BankTest {
 	@Test
 	public void verifyRequestTest_AccountOK() {		
 		//Check Password and cardSerialNumber matches		
-		assertEquals("account ok", testBank.verifyRequest("123", 33333));				
+		assertEquals("account ok", testBank.verifyRequest(testAccountOK.getPassword(), testAccountOK.getMyCard().getSerialNumber()));				
 	}
 	@Test
 	public void verifyRequestTest_BadAccount() {
 		//Check bad account
-		assertEquals("bad account", testBank.verifyRequest("", 44444));		
+		assertEquals("bad account", testBank.verifyRequest("", testAccountNullPassword.getMyCard().getSerialNumber()));		
 	}
 	@Test
 	public void verifyRequestTest_BadBankCode() {
