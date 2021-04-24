@@ -44,18 +44,30 @@ public class DatabaseProxyTest {
     }
     
     @Test
-    public void selectAccountByCardSerialNoTest() {
+    public void selectAccountByCardSerialNoTest_OK() {
     	for(int i=NumberOfTestAccount-1; i>=0; i--) {
     		Account findAccount = testDatabaseProxy.selectAccountByCardSerialNo(testAccounts[i].getMyCard().getSerialNumber());
     		assertEquals(testAccounts[i], findAccount);
     	}
     }
     @Test
-    public void selectAccountByAccountNumberTest() {
+    public void selectAccountByCardSerialNoTest_NULL() {
+    	//There is no account tied with serialNumber = Integer.MAX_VALUE.
+		Account findAccount = testDatabaseProxy.selectAccountByCardSerialNo(Integer.MAX_VALUE);
+		assertEquals(null, findAccount);    	
+    }
+    @Test
+    public void selectAccountByAccountNumberTest_OK() {
     	for(int i=NumberOfTestAccount-1; i>=0; i--) {
     		Account findAccount = testDatabaseProxy.selectAccountByAccountNumber(testAccounts[i].getAccount_number());
     		assertEquals(testAccounts[i], findAccount);
     	}
+    }
+    @Test
+    public void selectAccountByAccountNumberTest_NULL() {    	
+		//There is no account tied with accountNumber = Integer.MAX_VALUE.
+		Account findAccount = testDatabaseProxy.selectAccountByAccountNumber(Integer.MAX_VALUE);
+		assertEquals(null, findAccount);    	
     }
     @Test
     public void setWrongPasswordCountTest() {
