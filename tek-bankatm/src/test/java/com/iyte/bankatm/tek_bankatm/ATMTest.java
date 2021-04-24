@@ -25,6 +25,7 @@ public class ATMTest {
 	int minWithdrawPerTransaction = 20;
 	int maxWithdrawPerTransaction = 20000;
 	Account MainAccount;
+	Account SecondaryAccount;
 	Card TestCard; 
 	//
 
@@ -39,7 +40,9 @@ public class ATMTest {
 		TestATM.getMyOperatorPanel().initializeATM(CashOnHand, minWithdrawPerTransaction, maxWithdrawPerTransaction, maxWithdrawPerDayAccount);
 
 		MainAccount = ParentBank.createNewAccount(1234, "123", 0, 33333, LocalDate.of(2022, 1, 8));
+		SecondaryAccount = ParentBank.createNewAccount(4321, "1453", 0, 33333, LocalDate.of(2022, 1, 8));
 		MainAccount.setBalance(Money.of(1500, "USD"));
+		SecondaryAccount.setBalance(Money.of(2000, "USD"));
 		TestCard = MainAccount.getMyCard();
     }
 
@@ -47,7 +50,7 @@ public class ATMTest {
     public void restoreSystemInput() {
         System.setIn(System.in);        
     }
-    
+   
 	@Test
 	public void SuccessfulWithdrawTest() {
 	    systemInMock.provideLines("123", "w", "50");
@@ -102,4 +105,21 @@ public class ATMTest {
 		assertEquals(ATMstate.EJECTING_CARD,TestATM.getState() );
 	}	
 	
+	@Test
+	public void SuccessfulTransferTest() {
+	    systemInMock.provideLines("123", "t", "4321", "150");
+		TestATM.userInsertedCard(TestCard);
+		assertEquals(Money.of(2150, "USD"), SecondaryAccount.getBalance());
+		assertEquals(Money.of(1350, "USD"), MainAccount.getBalance());
+		assertEquals(Money.of(3850, "USD"), MainAccount.getLeftMaxWithdrawPerDay());
+		
+	}
+	
+	@Test
+	public void UnSuccessfulTransferTestwithInvalidAccount() {
+	    systemInMock.provideLines("123", "t", "1598", "150");
+		TestATM.userInsertedCard(TestCard);
+		assertEquals(ATMstate.FailedTransfer, TestATM.getState());
+		
+	}
 }

@@ -9,5 +9,6 @@ public enum ATMstate {
 	PERFORMING_TRANSACTION,
 	PRINTING_RECEIPT,
 	EJECTING_CARD,		
-	RETAINING_CARD,		
+	RETAINING_CARD, 
+	FailedTransfer,		
 }

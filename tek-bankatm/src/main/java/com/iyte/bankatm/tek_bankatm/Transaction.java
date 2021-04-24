@@ -15,8 +15,29 @@ public class Transaction {
 	private double Amount; //will be replaced
 
 	private int ToAccountNumber;
+
+	private Account FromAccount;
+	private Account ToAccount;
+	
+	public Account getFromAccount() {
+		return FromAccount;
+	}
+
+	public void setFromAccount(Account fromAccount) {
+		FromAccount = fromAccount;
+	}
+
+	public Account getToAccount() {
+		return ToAccount;
+	}
+
+	public void setToAccount(Account toAccount) {
+		ToAccount = toAccount;
+	}
+
 	
 	private TransactionTypes Type;
+	
 	public TransactionTypes getType() {
 		return Type;
 	}
@@ -47,8 +68,11 @@ public class Transaction {
 	
 	public Account readAccountNumber() {		
 		this.ToAccountNumber =  atm.getMyDisplay().typedAccountNumber();
-		return this.atm.getMyBank().verifyAccountNumber(this.ToAccountNumber);
+		Account ToAccount = this.atm.getMyBank().verifyAccountNumber(this.ToAccountNumber);
+		this.setToAccount(ToAccount);
+		return ToAccount;
 	}
+	
 	public boolean verify() {
 		if(atm.getMaxWithdrawPerTransaction() >= this.Amount &&
 				atm.getCashOnHand().isGreaterThanOrEqualTo(Money.of(this.Amount, "USD")))
@@ -86,7 +110,7 @@ public class Transaction {
 	}
 	
 	public void initiateTransfer() {
-		this.atm.getMyBank().startTransfer(this.Amount);
+		this.atm.getMyBank().startTransfer(this.Amount, FromAccount, ToAccount);
 		//new Log().logSend(String.format("Transfer from %d to %d with Amount %f %s", this.Account.getAccount_number(), this.ToAccountNumber, this.Amount, "USD"));
 		
 		

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import javax.money.MonetaryAmount;
 
+import org.javamoney.moneta.Money;
+
 public class Bank {
 	private DatabaseProxy MyDatabaseProxy;
 	public DatabaseProxy getMyDatabaseProxy() {
@@ -81,12 +83,18 @@ public class Bank {
 	}
 
 	public Account verifyAccountNumber(int accountNumber) {
-		// TODO Auto-generated method stub
+
 		return this.MyDatabaseProxy.selectAccountByAccountNumber(accountNumber);
 	}
 
-	public void startTransfer(double Amount) {
+	public void startTransfer(double Amount, Account fromAccount, Account toAccount ) {
 		// TODO Auto-generated method stub
+		MonetaryAmount FromBalance = fromAccount.getBalance();
+		MonetaryAmount ToBalance = toAccount.getBalance();
+		MonetaryAmount AmountMoney = Money.of(Amount, "USD");
+		fromAccount.setBalance(FromBalance.subtract(AmountMoney));
+		toAccount.setBalance(ToBalance.add(AmountMoney));
+		fromAccount.setLeftMaxWithdrawPerDay(fromAccount.getLeftMaxWithdrawPerDay().subtract(AmountMoney));
 		
 	}
 }

@@ -122,8 +122,8 @@ public class ATM {
 		
 		//ATM Func REQ 9
 		if(response.equals("account ok")) {			
-			callStateCHOOSE_TRANSACTION();		
 			this.state =  ATMstate.CHOOSE_TRANSACTION;	
+			callStateCHOOSE_TRANSACTION();		
 		//ATM Func REQ 8
 		} else if(response.equals("bad password")) {
 			MyDisplay.display("Password is wrong");
@@ -166,34 +166,29 @@ public class ATM {
         	anyTransaction.readAmount();
         	Boolean IsVerifed = anyTransaction.verify();
         	if(IsVerifed) {
-        		System.out.println("It's ok!");
         		anyTransaction.initiateSequence();
-        	}else{
-        		System.out.println("It's nok!");        		
         	}
     	}else if(Option.charAt(0) == 't') {
     		anyTransaction.setType(TransactionTypes.Transfer);
     		Account toTransfer = anyTransaction.readAccountNumber();
+    		anyTransaction.setFromAccount(this.getMyBank().getMyDatabaseProxy().selectAccountByCardSerialNo(this.cardSerialNumber));
     		if(toTransfer != null) {
 	        	anyTransaction.readAmount();
 	        	Boolean IsVerifed = anyTransaction.verify();
 	        	if(IsVerifed) {
 	        		anyTransaction.initiateTransfer();
-	        		System.out.println("Transfer is completed");
-	        	}else {
-
-	        		System.out.println("It's nok!");
 	        	}
-	    		//ATM Func REQ 17
     		}
     		else {
     			System.out.println("Invalid Account!");
+    			this.state = ATMstate.FailedTransfer;
     		}    		
     	}else {
     		MyDisplay.display("Wrong input, try again");
     		callStateCHOOSE_TRANSACTION();
-    	}    	
-    		}
+    	}
+
+	}
     		
 
 	public void callStatePERFORMING_TRANSACTION() {

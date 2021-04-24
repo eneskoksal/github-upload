@@ -148,8 +148,8 @@ public class BankTest {
 		MonetaryAmount LeftWithdrawAfter = testAccountOK.getLeftMaxWithdrawPerDay();		
 		assertEquals(NewBalance, Money.of(1500.05, "USD").subtract(Amount));
 		assertEquals(LeftWithdrawAfter, LeftWithdrawBefore.subtract(Amount));
-	}*/
-/*
+	}
+
 	@Test
 	public void createNewAccountTest() {
 		//Generate an account with random parameters, observe it is not NULL
