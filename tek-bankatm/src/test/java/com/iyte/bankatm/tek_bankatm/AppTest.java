@@ -13,6 +13,7 @@ import org.junit.Test;
 
 public class AppTest 
 {
+	/*
 	Bank TestBank = new Bank();
     ATM TestATM = TestBank.getMyATM();
     OperatorPanel TestOP = TestATM.getMyOperatorPanel();
@@ -41,5 +42,6 @@ public class AppTest
     public void TheAccountTests(){
 		
     }
+	*/
 }
 

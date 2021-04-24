@@ -23,7 +23,7 @@ public class Display {
 		Scanner MyKeyboard = new Scanner(System.in);
 		this.display(prompt);
 		String password = MyKeyboard.nextLine();
-		MyKeyboard.close();
+		//MyKeyboard.close();
 		return password;		
 	}
 
@@ -39,7 +39,7 @@ public class Display {
 			this.display(menu.get(index));
 		}
 		String getInput = MyKeyboard.nextLine();
-		MyKeyboard.close();
+		//MyKeyboard.close();
 		return getInput;
 	}
 	
@@ -47,7 +47,7 @@ public class Display {
 		Scanner MyKeyboard = new Scanner(System.in);
 		this.display("Enter the Account Number");		
 		int getInt = Integer.parseInt(MyKeyboard.nextLine());
-		MyKeyboard.close();
+		//MyKeyboard.close();
 		return getInt;
 		
 	}
@@ -60,7 +60,7 @@ public class Display {
 		Scanner MyKeyboard = new Scanner(System.in);
 		this.display("Enter the amount");		
 		String inputAmount = MyKeyboard.nextLine();
-		MyKeyboard.close();
+		//MyKeyboard.close();
 		return Double.parseDouble(inputAmount);
 	}
 

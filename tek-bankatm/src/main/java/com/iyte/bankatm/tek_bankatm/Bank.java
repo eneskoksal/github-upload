@@ -6,6 +6,10 @@ import javax.money.MonetaryAmount;
 
 public class Bank {
 	private DatabaseProxy MyDatabaseProxy;
+	public DatabaseProxy getMyDatabaseProxy() {
+		return MyDatabaseProxy;
+	}
+
 	private ATM MyATM;
 	
 	public Bank() {
@@ -55,6 +59,7 @@ public class Bank {
 			return "transaction failed"; // Bank Func REQ 7
 		}
 	}
+	
 	public void updateAccount(int cardSerialNumber, MonetaryAmount Amount) {		
 		MyDatabaseProxy.minusBalance(cardSerialNumber, Amount); // Bank Func REQ 8
 		MyDatabaseProxy.setLeftMaxWithdrawPerDay(cardSerialNumber, Amount);  // Bank Func REQ 9

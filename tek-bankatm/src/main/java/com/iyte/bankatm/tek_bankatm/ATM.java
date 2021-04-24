@@ -41,10 +41,19 @@ public class ATM {
 	private int limitTimeForOperation;	
 	private int cardSerialNumber;	
 	private CashDispenser MyCashDispenser;
+	public CashDispenser getMyCashDispenser() {
+		return MyCashDispenser;
+	}
+	public void setMyCashDispenser(CashDispenser myCashDispenser) {
+		MyCashDispenser = myCashDispenser;
+	}
+
+
 	private CardReader MyCardReader;	
 	private Display MyDisplay;
 	private OperatorPanel MyOperatorPanel;
 	private Card insertedCard;
+	private ATMstate state;
 	
 	//After ATM is created set state to IDLE
 	public ATM(Bank aBank) {
@@ -115,29 +124,39 @@ public class ATM {
 		
 		//ATM Func REQ 9
 		if(response.equals("account ok")) {			
-			callStateCHOOSE_TRANSACTION();			
+			callStateCHOOSE_TRANSACTION();		
+			this.state =  ATMstate.CHOOSE_TRANSACTION;	
 		//ATM Func REQ 8
 		} else if(response.equals("bad password")) {
 			MyDisplay.display("Password is wrong");
 			callStateEJECTING_CARD();
+			this.state = ATMstate.EJECTING_CARD;
 		//ATM Func REQ 10
 		} else if(response == "keep the card") {
 			callStateRETAINING_CARD();
+			this.state = ATMstate.RETAINING_CARD;
 		//ATM Func REQ 8	
 		} else if(response.equals("bad bank code")) {
 			MyDisplay.display("Bank code is wrong");
 			callStateEJECTING_CARD();
+			this.state = ATMstate.EJECTING_CARD;
 		//ATM Func REQ 8	
 		} else if(response.equals("bad account")) {
 			MyDisplay.display("Some problem with account");
 			callStateEJECTING_CARD();
+			this.state = ATMstate.EJECTING_CARD;
 			
 		} else {
 			MyDisplay.display("Unhandled exception");
 			callStateEJECTING_CARD();
+			this.state = ATMstate.EJECTING_CARD;
 		}		
 	}
 	
+	public ATMstate getState() {
+		return state;
+	}
+
 	public void callStateCHOOSE_TRANSACTION() {
 		Transaction anyTransaction = new Transaction(this, this.insertedCard);    	    	
     	String Option  =  MyDisplay.readMenuChoice(anyTransaction.getOfferedTransactions());
@@ -190,6 +209,7 @@ public class ATM {
 		MyDisplay.display("Ejecting the card");
 		MyCardReader.ejectCard();		
 		MyDisplay.display("You should take your card");
+		this.state = ATMstate.EJECTING_CARD;
 		callStateIDLE(); //Session completed return to idle
 	}
 	//ATM Func REQ 10
@@ -205,10 +225,7 @@ public class ATM {
 		return MyBank.verifyRequest(password, cardSerialNumber);
 	}
 
-	public void readAccountNum(int accountNum) {
-		// TODO - implement ATM.readAccountNum
-		throw new UnsupportedOperationException();
-	}
+
 	//User triggers this function
 	public void userInsertedCard(Card aCard) {
 		MyCardReader.insertCard(aCard);
