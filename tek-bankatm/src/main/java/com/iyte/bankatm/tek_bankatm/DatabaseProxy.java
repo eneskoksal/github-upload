@@ -3,8 +3,6 @@ package com.iyte.bankatm.tek_bankatm;
 import java.util.ArrayList;
 import javax.money.MonetaryAmount;
 
-import org.javamoney.moneta.Money;
-
 public class DatabaseProxy {
 	
 	private ArrayList<Account> DB;
