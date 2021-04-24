@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class BankTest {
-	
+	/*
 	private Bank testBank;
 	private Account testAccountOK; //OK
 	private Account testAccountNullPassword; //null password
@@ -136,7 +136,7 @@ public class BankTest {
 	public void updateAccountTest() {
 		/* Test if updateAccount method calling respective methods in DatabaseProxy
 		 * Called methods are tested separately in DatabaseProxy*/		
-	
+	/*
 		testAccountOK.setBalance(Money.of(1500.05, "USD"));
 		MonetaryAmount LeftWithdrawBefore = testAccountOK.getLeftMaxWithdrawPerDay();		
 		int cardSerialNumber = testAccountOK.getMyCard().getSerialNumber();
@@ -168,6 +168,6 @@ public class BankTest {
 		int accountNumber = testAccountOK.getAccount_number();
 		assertEquals(testAccountOK, testBank.verifyAccountNumber(accountNumber));
 	}
-	
+	*/
 }
 

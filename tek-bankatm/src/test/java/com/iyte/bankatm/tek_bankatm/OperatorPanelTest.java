@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class OperatorPanelTest {
+	/*
 	private OperatorPanel testOperatorPanel;
 	private ATM testATM;
 	
@@ -45,5 +46,5 @@ public class OperatorPanelTest {
 		//getInitialCash Testing
 		assertEquals(testOperatorPanel.getInitialCash(), testATM.getCashOnHand());		
 	}	
-	
+	*/
 }

@@ -12,12 +12,13 @@ public class Transaction {
 	protected int pin;
 	
 	private ArrayList<String> OfferedTransactions;	
-	private double Amount; //will be replaced
-
+	private double Amount; 
+	
 	private int ToAccountNumber;
 
 	private Account FromAccount;
 	private Account ToAccount;
+	private TransactionTypes Type;
 	
 	public Account getFromAccount() {
 		return FromAccount;
@@ -35,23 +36,12 @@ public class Transaction {
 		ToAccount = toAccount;
 	}
 
-	
-	private TransactionTypes Type;
-	
 	public TransactionTypes getType() {
 		return Type;
 	}
 
 	public void setType(TransactionTypes type) {
 		Type = type;
-	}
-
-	public Transaction(ATM atm, Card Card) {
-		this.OfferedTransactions = new ArrayList<String>();
-		this.setOfferedTransaction("Withdrawal");
-    	this.setOfferedTransaction("Transfer");
-		this.atm = atm;
-		this.card = Card;
 	}
 	
 	public ArrayList<String> getOfferedTransactions() {
@@ -62,10 +52,27 @@ public class Transaction {
 		this.OfferedTransactions.add(Transaction);
 	}
 
+	public Transaction(ATM atm, Card Card) {
+		this.OfferedTransactions = new ArrayList<String>();
+		this.setOfferedTransaction("Withdrawal");
+    	this.setOfferedTransaction("Transfer");
+		this.atm = atm;
+		this.card = Card;
+	}
+	
+
 	public void readAmount() {
 		this.Amount = atm.getMyDisplay().readAmount();
 	}
 	
+	public double getAmount() {
+		return Amount;
+	}
+
+	public void setAmount(double amount) {
+		Amount = amount;
+	}
+
 	public Account readAccountNumber() {		
 		this.ToAccountNumber =  atm.getMyDisplay().typedAccountNumber();
 		Account ToAccount = this.atm.getMyBank().verifyAccountNumber(this.ToAccountNumber);
@@ -74,6 +81,8 @@ public class Transaction {
 	}
 	
 	public boolean verify() {
+		System.err.println(atm.getMaxWithdrawPerTransaction());
+		System.err.println(this.Amount);
 		if(atm.getMaxWithdrawPerTransaction() >= this.Amount &&
 				atm.getCashOnHand().isGreaterThanOrEqualTo(Money.of(this.Amount, "USD")))
 			return true;
@@ -111,8 +120,6 @@ public class Transaction {
 	
 	public void initiateTransfer() {
 		this.atm.getMyBank().startTransfer(this.Amount, FromAccount, ToAccount);
-		//new Log().logSend(String.format("Transfer from %d to %d with Amount %f %s", this.Account.getAccount_number(), this.ToAccountNumber, this.Amount, "USD"));
-		
-		
+	
 	}
 }
