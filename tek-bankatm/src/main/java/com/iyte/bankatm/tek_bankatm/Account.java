@@ -47,9 +47,7 @@ public class Account {
 	public void setBalance(MonetaryAmount balance) {
 		this.balance = balance;
 	}
-	public int getAccountType() {
-		return accountType;
-	}
+
 	public void setAccountType(int accountType) {
 		this.accountType = accountType;
 	}

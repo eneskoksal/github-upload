@@ -1,6 +1,5 @@
 package com.iyte.bankatm.tek_bankatm;
 
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 import javax.money.MonetaryAmount;
 import org.javamoney.moneta.Money;
@@ -41,9 +40,6 @@ public class ATM {
 	private CashDispenser MyCashDispenser;
 	public CashDispenser getMyCashDispenser() {
 		return MyCashDispenser;
-	}
-	public void setMyCashDispenser(CashDispenser myCashDispenser) {
-		MyCashDispenser = myCashDispenser;
 	}
 
 
@@ -119,7 +115,7 @@ public class ATM {
 		//ATM Func REQ 7
 		String password = MyDisplay.readPIN("Please type your password");		
 		String response = this.verify(password, cardSerialNumber);
-		
+		System.out.print(response);
 		//ATM Func REQ 9
 		if(response.equals("account ok")) {			
 			this.state =  ATMstate.CHOOSE_TRANSACTION;	
@@ -143,7 +139,6 @@ public class ATM {
 			MyDisplay.display("Some problem with account");
 			callStateEJECTING_CARD();
 			this.state = ATMstate.EJECTING_CARD;
-			
 		} else {
 			MyDisplay.display("Unhandled exception");
 			callStateEJECTING_CARD();
@@ -185,15 +180,12 @@ public class ATM {
     		}    		
     	}else {
     		MyDisplay.display("Wrong input, try again");
-    		callStateCHOOSE_TRANSACTION();
+    		this.callStateEJECTING_CARD();
     	}
 
 	}
     		
 
-	public void callStatePERFORMING_TRANSACTION() {
-		System.out.println("Reading a card");
-	}
 	
 	public void callStatePRINTING_RECEIPT() {
 		System.out.println("Printing Receipt");
@@ -231,9 +223,7 @@ public class ATM {
 		}			
 		return false;
 	}
-	public LocalDateTime checkTime() {		
-		return LocalDateTime.now();
-	}
+
 	public MonetaryAmount getCashOnHand() {
 		return this.MyCashDispenser.getCashOnHand();
 	}	

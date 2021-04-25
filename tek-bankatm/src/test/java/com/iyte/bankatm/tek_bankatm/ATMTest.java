@@ -1,8 +1,6 @@
 package com.iyte.bankatm.tek_bankatm;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.SequenceInputStream;
+
 import java.time.LocalDate;
 
 import javax.money.MonetaryAmount;
@@ -27,9 +25,7 @@ public class ATMTest {
 	Account MainAccount;
 	Account SecondaryAccount;
 	Card TestCard; 
-	//
 
-	
   @Rule
   public final TextFromStandardInputStream systemInMock = emptyStandardInputStream();
   
@@ -123,4 +119,19 @@ public class ATMTest {
 		
 	}
 	
+	@Test
+	public void Test() {
+		Card DummyCard = new Card(1453, LocalDate.now());
+	    systemInMock.provideLines("123");
+		TestATM.userInsertedCard(DummyCard);
+		assertEquals(ATMstate.EJECTING_CARD, TestATM.getState());
+		
+	}
+	@Test
+	public void UnSuccessfulTransactionInvalidOption() {
+	    systemInMock.provideLines("123", "u", "1598", "150");
+		TestATM.userInsertedCard(TestCard);
+		assertEquals(ATMstate.EJECTING_CARD, TestATM.getState());
+		
+	}
 }

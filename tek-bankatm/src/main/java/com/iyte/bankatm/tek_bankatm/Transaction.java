@@ -36,9 +36,6 @@ public class Transaction {
 		ToAccount = toAccount;
 	}
 
-	public TransactionTypes getType() {
-		return Type;
-	}
 
 	public void setType(TransactionTypes type) {
 		Type = type;
@@ -88,12 +85,13 @@ public class Transaction {
 			return true;
 		//ATM Func REQ 11
 		else if(atm.getMaxWithdrawPerTransaction() < this.Amount) {
-			atm.getMyDisplay().display("Too much to withdraw, max allowed: " + atm.getMaxWithdrawPerTransaction());			
+			atm.getMyDisplay().display("Too much to withdraw, max allowed: " + atm.getMaxWithdrawPerTransaction());
+			return false;
 		}
-		else if(atm.getCashOnHand().isLessThan(Money.of(this.Amount, "USD"))) {
+		else{
 			atm.getMyDisplay().display("Not enough money in the ATM ");
+			return false;
 		}
-		return false;
 	}
 
 	public void initiateSequence() {		
@@ -119,7 +117,7 @@ public class Transaction {
 	}
 	
 	public void initiateTransfer() {
-		this.atm.getMyBank().startTransfer(this.Amount, FromAccount, ToAccount);
+		this.atm.getMyBank().startTransfer(this.Amount, this.getFromAccount(), this.getToAccount());
 	
 	}
 }

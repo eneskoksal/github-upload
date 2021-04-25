@@ -16,9 +16,6 @@ public class Card {
 		this.expireDate = expireDate;				
 	}
 
-	public void setSerialNumber(int serialNumber) {
-		this.serialNumber = serialNumber;
-	}
 
 	public int getSerialNumber() {
 		return this.serialNumber;
