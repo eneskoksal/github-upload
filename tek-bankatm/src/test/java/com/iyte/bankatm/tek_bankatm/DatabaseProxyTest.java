@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class DatabaseProxyTest {
-	/*
+	
 	private DatabaseProxy testDatabaseProxy;
 	private Account testAccounts[];
 	private int NumberOfTestAccount = 1000; //Number of testAccount = number of test run
@@ -175,5 +175,5 @@ public class DatabaseProxyTest {
 		testDatabaseProxy.setLeftMaxWithdrawPerDay(testAccounts[0].getMyCard().getSerialNumber(), randomWithdrawAmount);    		
 		assertEquals(randomInitLimitAmount.subtract(randomWithdrawAmount), testAccounts[0].getLeftMaxWithdrawPerDay());
     }
-    */
+    
 }

@@ -17,7 +17,7 @@ import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 import static org.junit.Assert.assertEquals;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.*;
 public class ATMTest {
-	/*
+	
 	private Bank ParentBank =  new Bank();
 	ATM TestATM = ParentBank.getMyATM();
     MonetaryAmount maxWithdrawPerDayAccount = Money.of(4000, "USD");
@@ -122,5 +122,5 @@ public class ATMTest {
 		assertEquals(ATMstate.FailedTransfer, TestATM.getState());
 		
 	}
-	*/
+	
 }

@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class CashDispenserTest {
 	private CashDispenser testCashDispenser;
-	/*
+	
 	private MonetaryAmount randomMoney() {
 		double randomDbl = Double.MIN_VALUE + Math.random() * (Double.MAX_VALUE - Double.MIN_VALUE);
 		MonetaryAmount randomAmount = Money.of(randomDbl, "USD");
@@ -29,5 +29,5 @@ public class CashDispenserTest {
 		testCashDispenser.dispenseCash(dispensedAmount);
 		assertEquals(initCash.subtract(dispensedAmount), testCashDispenser.getCashOnHand());		
 	}
-*/
+
 }

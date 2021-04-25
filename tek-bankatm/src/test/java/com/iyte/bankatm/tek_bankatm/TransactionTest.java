@@ -40,7 +40,7 @@ public class TransactionTest {
 		TestATM.getMyOperatorPanel().initializeATM(CashOnHand, minWithdrawPerTransaction, maxWithdrawPerTransaction, maxWithdrawPerDayAccount);
 		TestTransaction = new Transaction(TestATM, TestCard);
     }
-	/*
+	
 	@Test
 	public void readAccountNumberTest() {
 		systemInMock.provideLines(String.valueOf(MainAccount.getAccount_number()));
@@ -55,8 +55,7 @@ public class TransactionTest {
 		assertEquals(Double.parseDouble(Value), TestTransaction.getAmount(), 0.0001);
 	}
 	
-	*/
-	/*
+	
 	@Test
 	public void SuccessfulVerifyTest() {
 		TestTransaction.setAmount(maxWithdrawPerTransaction - 150);
@@ -100,7 +99,7 @@ public class TransactionTest {
 		assertEquals(ATMstate.EJECTING_CARD, TestATM.getState());
 		assertEquals(CashOnHand, MainAccount.getBalance());
 	}
-	*/
+	
 	@Test
 	public void SuccessfulinitiateTransferTest() {
 		MainAccount.setBalance(CashOnHand);

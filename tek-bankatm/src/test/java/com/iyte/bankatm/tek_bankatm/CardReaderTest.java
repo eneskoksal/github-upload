@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CardReaderTest {
-	/*
+	
 	private CardReader testCardReader;
 	private Card testCard;
 	private ATM testATM;
@@ -44,5 +44,5 @@ public class CardReaderTest {
 		//Observe ATM goes from IDLE/OFF to another state
 		assertTrue((testATM.getState() != ATMstate.IDLE) && (testATM.getState() != ATMstate.OFF));		
 	}
-	*/
+	
 }
