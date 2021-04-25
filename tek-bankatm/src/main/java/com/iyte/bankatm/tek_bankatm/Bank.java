@@ -88,13 +88,14 @@ public class Bank {
 	}
 
 	public void startTransfer(double Amount, Account fromAccount, Account toAccount ) {
-		// TODO Auto-generated method stub
 		MonetaryAmount FromBalance = fromAccount.getBalance();
 		MonetaryAmount ToBalance = toAccount.getBalance();
 		MonetaryAmount AmountMoney = Money.of(Amount, "USD");
-		fromAccount.setBalance(FromBalance.subtract(AmountMoney));
-		toAccount.setBalance(ToBalance.add(AmountMoney));
-		fromAccount.setLeftMaxWithdrawPerDay(fromAccount.getLeftMaxWithdrawPerDay().subtract(AmountMoney));
-		
+		if(FromBalance.getNumber().doubleValue() >= Amount && fromAccount.getLeftMaxWithdrawPerDay().getNumber().doubleValue() >= Amount ){
+			fromAccount.setBalance(FromBalance.subtract(AmountMoney));
+			toAccount.setBalance(ToBalance.add(AmountMoney));
+			fromAccount.setLeftMaxWithdrawPerDay (fromAccount.getLeftMaxWithdrawPerDay().subtract(AmountMoney));
+			
+		}
 	}
-}
+}  

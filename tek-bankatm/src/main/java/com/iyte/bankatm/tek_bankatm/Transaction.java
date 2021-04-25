@@ -98,6 +98,7 @@ public class Transaction {
 
 	public void initiateSequence() {		
 		//ATM Func REQ 12
+
 		String response = this.atm.getMyBank().verifyTransaction(this.card.getSerialNumber(), Money.of(this.Amount, "USD")); 
 		
 		//ATM Func REQ 13
@@ -112,7 +113,6 @@ public class Transaction {
 			//ATM Func REQ 15  "Response sent to bank for money dispensed."
 			this.atm.getMyBank().updateAccount(this.card.getSerialNumber(), Money.of(Amount, "USD"));			
 		}else {
-			System.out.println(response);
 			this.atm.callStateEJECTING_CARD();
 			//ATM Func REQ 16
 		}		

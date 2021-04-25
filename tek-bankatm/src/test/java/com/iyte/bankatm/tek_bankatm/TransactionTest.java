@@ -26,8 +26,8 @@ public class TransactionTest {
 	int minWithdrawPerTransaction = 20;
 	int maxWithdrawPerTransaction = 20000;
 	Account MainAccount = ParentBank.createNewAccount(1234, "123", 0, 33333, LocalDate.of(2022, 1, 8));
-	Account SecondaryAccount;
-	Card TestCard; 
+	Account SecondaryAccount = ParentBank.createNewAccount(4321, "123", 0, 33333, LocalDate.of(2022, 1, 8));
+	Card TestCard = MainAccount.getMyCard(); 
 	
 	
 	Transaction TestTransaction;
@@ -56,7 +56,7 @@ public class TransactionTest {
 	}
 	
 	*/
-	
+	/*
 	@Test
 	public void SuccessfulVerifyTest() {
 		TestTransaction.setAmount(maxWithdrawPerTransaction - 150);
@@ -73,4 +73,72 @@ public class TransactionTest {
 		TestTransaction.setAmount(maxWithdrawPerTransaction - 350);
 		assertEquals(false, TestTransaction.verify());
 	}
+	@Test
+	public void SuccessfulinitiateSequenceTest() {
+		MainAccount.setBalance(CashOnHand);
+		MainAccount.setLeftMaxWithdrawPerDay(maxWithdrawPerDayAccount);
+		TestTransaction.setAmount(500);
+		TestTransaction.initiateSequence();
+		assertEquals(CashOnHand.subtract(Money.of(500, "USD")), MainAccount.getBalance());
+		//Ekleme
+	}	
+	@Test
+	public void UnSuccessfulinitiateSequenceTestWithTooMuchWithdraw() {
+		MainAccount.setBalance(CashOnHand);
+		MainAccount.setLeftMaxWithdrawPerDay(maxWithdrawPerDayAccount);
+		TestTransaction.setAmount(maxWithdrawPerDayAccount.getNumber().doubleValue() + 150);
+		TestTransaction.initiateSequence();
+		assertEquals(ATMstate.EJECTING_CARD, TestATM.getState());
+		assertEquals(CashOnHand, MainAccount.getBalance());
+	}
+	@Test
+	public void UnSuccessfulinitiateSequenceTestWithBalanceNotEnough() {
+		MainAccount.setBalance(CashOnHand);
+		MainAccount.setLeftMaxWithdrawPerDay(maxWithdrawPerDayAccount);
+		TestTransaction.setAmount(CashOnHand.getNumber().doubleValue() + 150);
+		TestTransaction.initiateSequence();
+		assertEquals(ATMstate.EJECTING_CARD, TestATM.getState());
+		assertEquals(CashOnHand, MainAccount.getBalance());
+	}
+	*/
+	@Test
+	public void SuccessfulinitiateTransferTest() {
+		MainAccount.setBalance(CashOnHand);
+		MainAccount.setLeftMaxWithdrawPerDay(maxWithdrawPerDayAccount);
+		SecondaryAccount.setLeftMaxWithdrawPerDay(maxWithdrawPerDayAccount);
+		TestTransaction.setFromAccount(MainAccount);
+		TestTransaction.setToAccount(SecondaryAccount);
+		TestTransaction.setAmount(150);
+		TestTransaction.initiateTransfer();
+		
+		assertEquals(CashOnHand.subtract(Money.of(150, "USD")), MainAccount.getBalance());
+		assertEquals(Money.of(150, "USD"), SecondaryAccount.getBalance());
+	}
+	
+	@Test
+	public void UnSuccessfulinitiateTransferTestWithNotEnoughBalance() {
+		MainAccount.setBalance(CashOnHand);
+		MainAccount.setLeftMaxWithdrawPerDay(maxWithdrawPerDayAccount);
+		SecondaryAccount.setLeftMaxWithdrawPerDay(maxWithdrawPerDayAccount);
+		TestTransaction.setFromAccount(MainAccount);
+		TestTransaction.setToAccount(SecondaryAccount);
+		TestTransaction.setAmount(CashOnHand.add(Money.of(150, "USD")).getNumber().doubleValue());
+		TestTransaction.initiateTransfer();
+		
+		assertEquals(CashOnHand, MainAccount.getBalance());
+		assertEquals(Money.of(0, "USD"), SecondaryAccount.getBalance());
+	}		
+	@Test
+	public void UnSuccessfulinitiateTransferTestWithLimitExceed() {
+		MainAccount.setBalance(maxWithdrawPerDayAccount.add(Money.of(1789, "USD")));
+		MainAccount.setLeftMaxWithdrawPerDay(maxWithdrawPerDayAccount);
+		SecondaryAccount.setLeftMaxWithdrawPerDay(maxWithdrawPerDayAccount);
+		TestTransaction.setFromAccount(MainAccount);
+		TestTransaction.setToAccount(SecondaryAccount);
+		TestTransaction.setAmount(maxWithdrawPerDayAccount.add(Money.of(150, "USD")).getNumber().doubleValue());
+		TestTransaction.initiateTransfer();
+		
+		assertEquals(maxWithdrawPerDayAccount.add(Money.of(1789, "USD")), MainAccount.getBalance());
+		assertEquals(Money.of(0, "USD"), SecondaryAccount.getBalance());
+	}	
 }
